@@ -1,8 +1,8 @@
+import Map from "./Map"
 
 function App() {
   return (
-    <div>
-    </div>
+    <Map />
   );
 }
 

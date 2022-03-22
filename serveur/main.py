@@ -17,11 +17,11 @@ mysql.init_app(app)
 
 class recuperation(Resource):
     def get(self):
-        nomuser = request.args.get('nom')
-        print("nom" + nomuser)
+        iduser = request.args.get('id')
+        print("nom" + iduser)
         connect = mysql.get_db()
         cursor = connect.cursor()
-        cursor.execute("SELECT * from Users where nom=") + nomuser
+        cursor.execute("SELECT * from Users where id=") + iduser
         data = cursor.fetchone() 
         print("data :"+data)
         return data

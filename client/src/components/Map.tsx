@@ -1,42 +1,34 @@
-import * as React from "react";
-import mapboxgl from "mapbox-gl";
-import "mapbox-gl/dist/mapbox-gl.css"; 
-// import the mapbox-gl styles so that the map is displayed correctly
+import { useRef, useEffect } from "react"
+import mapboxgl from "mapbox-gl"
 
-function Map() {
-    // this is where the map instance will be stored after initialization
-  const [map, setMap] = React.useState<mapboxgl.Map>();
+// Grab the access token from your Mapbox account
+// I typically like to store sensitive things like this
+// in a .env file
+mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN!
 
-    // React ref to store a reference to the DOM node that will be used
-  // as a required parameter `container` when initializing the mapbox-gl
-  // will contain `null` by default
-    const mapNode = React.useRef(null);
+export const Map = () => {
+  const mapContainer = useRef(null)
 
-  React.useEffect(() => {
-    const node = mapNode.current;
-        // if the window object is not found, that means
-        // the component is rendered on the server
-        // or the dom node is not initialized, then return early
-    if (typeof window === "undefined" || node === null) return;
+  // this is where all of our map logic is going to live
+  // adding the empty dependency array ensures that the map
+  // is only created once
+  useEffect(() => {
+    // create the map and configure it
+    // check out the API reference for more options
+    // https://docs.mapbox.com/mapbox-gl-js/api/map/
+    const map = new mapboxgl.Map({
+      container: "map",
+      style: "mapbox://styles/mapbox/satellite-streets-v11",
+      center: [-119.99959421984575, 38.619551620333496],
+      zoom: 14,
+    })
+  }, [])
 
-        // otherwise, create a map instance
-    const mapboxMap = new mapboxgl.Map({
-      container: node,
-            accessToken: process.env.PUBLIC_MAPBOX_TOKEN,
-            style: "mapbox://styles/mapbox/streets-v11",
-      center: [-74.5, 40],
-      zoom: 9,
-    });
-
-        // save the map object to React.useState
-    setMap(mapboxMap);
-
-        return () => {
-      mapboxMap.remove();
-    };
-  }, []);
-
-    return <div ref={mapNode} style={{ width: "100%", height: "100%" }} />;
+  return (
+    <div
+      id="map"
+      ref={mapContainer}
+      style={{ width: "100%", height: "100vh" }}
+    />
+  )
 }
-
-export default Map

@@ -21,11 +21,17 @@ class recuperation(Resource):
         print("nom" + iduser)
         connect = mysql.get_db()
         cursor = connect.cursor()
-        cursor.execute("SELECT * from Users where id=") + iduser
+        requete = "SELECT * from Users where id='" + iduser + "'"
+        cursor.execute(requete)
         data = cursor.fetchone() 
-        print("data :"+data)
+        
         return data
 
+    def post(self):
+        return self
+
+    def delete(self):
+        return self
 
 api.add_resource(recuperation, '/connect')
 if __name__ == '__main__':

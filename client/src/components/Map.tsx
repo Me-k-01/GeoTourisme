@@ -55,8 +55,8 @@ export const Map = () => {
                     ],
                     "fill-extrusion-opacity": 0.6
                 }
-            });
-        });
+            })
+        );
     }, []);
 
     return (

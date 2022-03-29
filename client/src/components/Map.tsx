@@ -1,9 +1,6 @@
 import { useRef, useEffect } from "react"
-import mapboxgl from "mapbox-gl"
-
-// Grab the access token from your Mapbox account
-// I typically like to store sensitive things like this
-// in a .env file
+import mapboxgl  from "mapbox-gl"
+// Accès du token dans le fichier .en.local
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN!
 
 export const Map = () => {
@@ -11,17 +8,17 @@ export const Map = () => {
 
 
     useEffect(() => {
-        // API reference: https://docs.mapbox.com/mapbox-gl-js/api/map/
+        // réference d'API: https://docs.mapbox.com/mapbox-gl-js/api/map/
         const map = new mapboxgl.Map({
             container: "map",
-            style: "mapbox://styles/mapbox/outdoors-v11",
-            center: [2.146400, 43.928902],      
-            zoom: 12,      
-            pitch: 60,      
+            style: "mapbox://styles/mapbox/streets-v11",
+            center: [2.146400, 43.928902],
+            zoom: 12,
+            pitch: 60,
             //bearing: 80, // Orientation
         });
         // On modifie les couches qu'après que la map s'est completement chargée
-        map.on("load", () => 
+        map.on("load", () =>
             map.addLayer({
                 id: "add-3d-buildings",
                 source: "composite",
@@ -31,7 +28,7 @@ export const Map = () => {
                 minzoom: 15,
                 paint: {
                     "fill-extrusion-color": "#aaa",
-    
+
                     // Use an "interpolate" expression to
                     // add a smooth transition effect to
                     // the buildings as the user zooms in.

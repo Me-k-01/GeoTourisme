@@ -4,11 +4,14 @@ import Search from "./Search"
 function App() {
   return (
     <div>
-      <Map />
-      <div>
+      <header className="fixed-top">
         <Search onSubmit={(str) => {
           console.log(str);
         }} />
+      </header>
+      <Map />
+      <div>
+
       </div>
     </div>
   );

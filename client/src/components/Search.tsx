@@ -21,7 +21,7 @@ const Search: FunctionComponent<ISearchProps> = ({ onSubmit }) => {
             <button type="submit" onClick={(e) => {
                 e.preventDefault();
                 onSubmit(input);
-            }}>Search</button>
+            }}>Rechercher</button>
         </form>
 
     )

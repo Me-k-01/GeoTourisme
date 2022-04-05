@@ -1,0 +1,26 @@
+header form {
+    padding: 10px 0px;
+    background-color: rgba(0, 0, 0, .5);
+    width: 100%;
+}
+
+header form input {
+    border-radius: 10px;
+    margin-left: 15px;
+    color: white;
+    font-weight: bold;
+    foreground-color: white;
+    background-color: rgba(0, 0, 0, .5);
+}
+
+header form input::placeholder {
+    padding-left: 5px;
+    color: rgba(255, 255, 255, .75);
+}
+
+header form button {
+    border-radius: 10px;
+    background-color: rgb(64, 64, 64);
+    color: rgba(255, 255, 255, .75);
+    font-weight: bold;
+}

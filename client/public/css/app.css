@@ -13,6 +13,7 @@ header form {
 }
 
 header form input {
+    padding-left: 10px;
     border-width: 0px 2px 0px 0px;
     border-radius: 10px 0 0 10px;
     color: white;
@@ -21,8 +22,11 @@ header form input {
     background-color: rgba(0, 0, 0, .5);
 }
 
+input:focus{
+    outline: none;
+}
+
 header form input::placeholder {
-    padding-left: 5px;
     color: rgba(255, 255, 255, .75);
 }
 

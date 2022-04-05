@@ -1,12 +1,20 @@
 header form {
+    text-align: center;
     padding: 10px 0px;
     background-color: rgba(0, 0, 0, .5);
     width: 100%;
 }
 
-header form input {
+header form {
     border-radius: 10px;
-    margin-left: 15px;
+    margin-top: 10px;
+    margin-left: 10px;
+    width: 300px;
+}
+
+header form input {
+    border-width: 0px 2px 0px 0px;
+    border-radius: 10px 0 0 10px;
     color: white;
     font-weight: bold;
     foreground-color: white;
@@ -19,7 +27,8 @@ header form input::placeholder {
 }
 
 header form button {
-    border-radius: 10px;
+    border-width: 0px;
+    border-radius: 0 10px 10px 0;
     background-color: rgb(64, 64, 64);
     color: rgba(255, 255, 255, .75);
     font-weight: bold;

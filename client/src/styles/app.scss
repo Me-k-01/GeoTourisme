@@ -3,15 +3,16 @@ header {
 		text-align: center;
 		padding: 10px 0px;
 		background-color: rgba(0, 0, 0, .5);
-		width: 100%;
 		border-radius: 10px;
 		margin-top: 10px;
 		margin-left: 10px;
-		width: 300px;
+		width: 320px;
 		input {
 			padding-left: 10px;
 			border-width: 0px 2px 0px 0px;
 			border-radius: 10px 0 0 10px;
+			height: 25px;
+			width: 200px;
 			color: white;
 			font-weight: bold;
 			foreground-color: white;
@@ -21,6 +22,7 @@ header {
 			}
 		}
 		button {
+			height: 25px;
 			border-width: 0px;
 			border-radius: 0 10px 10px 0;
 			background-color: rgb(64, 64, 64);

@@ -51,11 +51,11 @@ class near(Resource):
         return self
 
 class contains(Resource):
-    def get(self):
-        str_w = request.args.get('words')
+    def get(self,str_w):
+        #str_w = request.args.get('words')
         if str_w == None:
             return []
-        words = urlparse(str_w).geturl().split(" ") #str_w.split(" ")
+        words = str_w.split(" ") #urlparse(str_w).geturl().split(" ") str_w.split(" ")
         words_search = ""
         w = len(words)
         for i in range(w):
@@ -81,6 +81,6 @@ class contains(Resource):
         return self
 
 api.add_resource(near, '/near')
-api.add_resource(contains, '/contains')
+api.add_resource(contains, '/contains/<str_w>')
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

@@ -36,7 +36,7 @@ const Scroller: FC<IScrollerProps> = ({ list }) => {
     return (
         list.length === 0 ?
             <div>Pas de resultat</div> :
-            <ul>
+            <ul className="scroller">
                 {list.map(({ nom, adresse, lat, long }, i) =>
                     <li key={i}>
                         <div className='select' onClick={() => {

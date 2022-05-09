@@ -4,6 +4,7 @@ from flask_restful import Resource, Api, reqparse
 from flaskext.mysql import MySQL
 from urllib.parse import urlparse
 from datetime import date, datetime
+import json
 import bdd
 
 app = Flask(__name__)
@@ -31,7 +32,7 @@ class near(Resource):
         connect = mysql.get_db()
         cursor = connect.cursor()
         requete = """SELECT
-                        nom, adresse, latitude, longitude, id
+                        nom, adresse, latitude, longitude
                      FROM
                         Lieux
                      NATURAL JOIN
@@ -42,7 +43,11 @@ class near(Resource):
                         (longitude BETWEEN """ + str(longitude-prox) + " AND " + str(longitude+prox)+")"
         cursor.execute(requete)
         data = cursor.fetchall()
-        return list(data)
+        tmp = "{"
+        for d in data:
+            tmp = tmp + "[ name: '" + d[0] + "' , adresse: '" + d[1] + "' , lat: " + str(d[2]) + ", long: " + str(d[3]) + "],"
+        tmp = tmp + "}"
+        return json.dumps(tmp)
 
     def post(self):
         return self
@@ -72,7 +77,12 @@ class contains(Resource):
                      WHERE """ + words_search
         cursor.execute(requete)
         data = cursor.fetchall()
-        return list(data)
+        tmp = "{"
+        for d in data:
+            tmp = tmp + "[ name: '" + d[0] + "' , adresse: '" + d[1] + "' , lat: " + str(d[2]) + ", long: " + str(d[3]) + "],"
+        tmp = tmp + "}"
+        print(json.dumps(tmp))
+        return json.dumps(tmp)
 
     def post(self):
         return self

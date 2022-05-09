@@ -22,6 +22,7 @@ const Search: FunctionComponent<ISearchProps> = ({ onSubmit }) => {
                 e.preventDefault();
                 onSubmit(input);
             }}>Rechercher</button>
+        <div id="result" className="scroller" hidden></div>
         </form>
 
     )

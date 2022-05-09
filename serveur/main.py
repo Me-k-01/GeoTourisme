@@ -45,7 +45,7 @@ class near(Resource):
         data = cursor.fetchall()
         tmp = "{"
         for d in data:
-            tmp = tmp + "[ name: '" + d[0] + "' , adresse: '" + d[1] + "' , lat: " + str(d[2]) + ", long: " + str(d[3]) + "],"
+            tmp = tmp + "[ 'nom': '" + d[0] + "' , 'adresse': '" + d[1] + "' , 'lat': " + str(d[2]) + ", 'long': " + str(d[3]) + "],"
         tmp = tmp + "}"
         return json.dumps(tmp)
 
@@ -79,7 +79,7 @@ class contains(Resource):
         data = cursor.fetchall()
         tmp = "{"
         for d in data:
-            tmp = tmp + "[ name: '" + d[0] + "' , adresse: '" + d[1] + "' , lat: " + str(d[2]) + ", long: " + str(d[3]) + "],"
+            tmp = tmp + "[ 'nom': '" + d[0] + "' , 'adresse': '" + d[1] + "' , 'lat': " + str(d[2]) + ", 'long': " + str(d[3]) + "],"
         tmp = tmp + "}"
         print(json.dumps(tmp))
         return json.dumps(tmp)

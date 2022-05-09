@@ -1,10 +1,10 @@
 from contextlib import nullcontext
-from flask import Flask, request
+from flask import Flask, Response, request, jsonify, make_response
+import json
 from flask_restful import Resource, Api, reqparse
 from flaskext.mysql import MySQL
 from urllib.parse import urlparse
 from datetime import date, datetime
-import json
 import bdd
 
 app = Flask(__name__)
@@ -43,11 +43,15 @@ class near(Resource):
                         (longitude BETWEEN """ + str(longitude-prox) + " AND " + str(longitude+prox)+")"
         cursor.execute(requete)
         data = cursor.fetchall()
-        tmp = "{"
+        lst = []
         for d in data:
-            tmp = tmp + "[ 'nom': '" + d[0] + "' , 'adresse': '" + d[1] + "' , 'lat': " + str(d[2]) + ", 'long': " + str(d[3]) + "],"
-        tmp = tmp + "}"
-        return json.dumps(tmp)
+            tmp = dict()
+            tmp.update({'nom': d[0]})
+            tmp.update({'adresse': d[1]})
+            tmp.update({'lat': d[2]})
+            tmp.update({'long': d[3]})
+            lst.append(tmp)
+        return jsonify(lst)
 
     def post(self):
         return self
@@ -77,12 +81,15 @@ class contains(Resource):
                      WHERE """ + words_search
         cursor.execute(requete)
         data = cursor.fetchall()
-        tmp = "{"
+        lst = []
         for d in data:
-            tmp = tmp + "[ 'nom': '" + d[0] + "' , 'adresse': '" + d[1] + "' , 'lat': " + str(d[2]) + ", 'long': " + str(d[3]) + "],"
-        tmp = tmp + "}"
-        print(json.dumps(tmp))
-        return json.dumps(tmp)
+            tmp = dict()
+            tmp.update({'nom': d[0]})
+            tmp.update({'adresse': d[1]})
+            tmp.update({'lat': d[2]})
+            tmp.update({'long': d[3]})
+            lst.append(tmp)
+        return jsonify(lst)
 
     def post(self):
         return self

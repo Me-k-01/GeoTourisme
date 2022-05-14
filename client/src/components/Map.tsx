@@ -7,8 +7,8 @@ mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN!
 export const Map = () => {
     const mapContainer = useRef(null);
 
-    var loc = {lat: 2.146400,
-               long: 43.928902};
+    var loc = {lat: 43.928902,
+               long: 2.146400};
 
     function success(pos: any) {
         console.log(pos);
@@ -27,16 +27,15 @@ export const Map = () => {
 
     // Create a GeoJSON feature collection for drop-off locations
     const dropoffs = turf.featureCollection(turf.point([loc.lat, loc.long]));
-    console.log(dropoffs);
 
     useEffect(() => {
         // réference d'API: https://docs.mapbox.com/mapbox-gl-js/api/map/
         const map = new mapboxgl.Map({
             container: "map",
             style: "mapbox://styles/mapbox/streets-v11",
-            center: [loc.lat, loc.long],
+            center: [loc.long, loc.lat],
             zoom: 12,
-            pitch: 60,
+            pitch: 0,
             //bearing: 80, // Orientation
         });
         // On modifie les couches qu'après que la map s'est completement chargée
@@ -80,7 +79,7 @@ export const Map = () => {
                 marker.classList.add('truck');
 
                 // Create a new marker
-                new mapboxgl.Marker(marker).setLngLat([loc.lat, loc.long]).addTo(map);
+                new mapboxgl.Marker(marker).setLngLat([loc.long, loc.lat]).addTo(map);
                                 
                 map.addLayer({
                     id: 'warehouse-symbol',

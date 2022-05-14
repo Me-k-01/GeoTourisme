@@ -1,0 +1,10 @@
+{
+  "version": "0.2.1",
+  "tasks": [
+    {
+      "taskLabel": "tâche-tsconfig",
+      "appliesTo": "client/tsconfig.json",
+      "type": "launch"
+    }
+  ]
+}

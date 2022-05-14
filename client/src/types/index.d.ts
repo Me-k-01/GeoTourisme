@@ -86,3 +86,7 @@ declare module '@mapbox/mapbox-gl-directions/dist/mapbox-gl-directions' {
         }[]
     }
 }
+
+declare module "react/jsx-runtime" {
+    export default any;
+}

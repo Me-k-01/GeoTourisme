@@ -12,8 +12,14 @@ function App() {
     <div>
       <header className="fixed-top">
         <Search hideResult={hideResult} onSelect={(loc) => {
-          console.log("Nouveau marqueur:", loc);
-          setMarkers(markers => [...markers, loc]);
+          // Verifie si le marqueur correspond au marqueur courrant
+          const cond = ({ long, lat }: Location) => long === loc.long && lat === loc.lat; 
+
+          if (!markers.find(cond)) // Ajout du marqueur
+            setMarkers(markers => [...markers, loc]); 
+          else // retirer le marqueur
+            setMarkers(markers.filter(loc => ! cond(loc))); 
+            
         }} onSubmit={(str) => {
           setHideResult(false);
 

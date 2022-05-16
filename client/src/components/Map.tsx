@@ -16,27 +16,25 @@ export const Map: FC<IMapProp> = ({ markers }) => {
     long: 2.146400
   });
 
-  const updatePos = () => { // TODO: update toutes les secondes
-    if (!navigator.geolocation) {
-      console.error("Géolocalisation non supportée");
-      return;
-    }
-    navigator.geolocation.getCurrentPosition((pos) => {
-      console.log("Position actuelle du client:", pos);
-      setPos({
-        lat: pos.coords.latitude,
-        long: pos.coords.longitude
-      });
-    }, null, {
-      enableHighAccuracy: true,
-      timeout: 5000,
-      maximumAge: 0
-    });
-
-  }
-
   useEffect(() => {
-    updatePos();
+    ///////// Géolocalisation /////////
+    if (!navigator.geolocation)
+      console.error("Géolocalisation non supportée");
+    else
+      setInterval(() => {
+        navigator.geolocation.getCurrentPosition((pos) => {
+          // console.log("Votre position actuelle:", pos);
+          setPos({
+            lat: pos.coords.latitude,
+            long: pos.coords.longitude
+          });
+        }, null, {
+          enableHighAccuracy: true,
+          timeout: 5000,
+          maximumAge: 0
+        });
+      }, 5000);
+    ///////////////////////////////
   }, []);
 
   return <MapBox
@@ -88,16 +86,3 @@ export const Map: FC<IMapProp> = ({ markers }) => {
     )}
   </MapBox>;
 }
-
-// export function Mapbox() {
-//   return <Map
-//     initialViewState={{
-//       longitude: -100,
-//       latitude: 40,
-//       zoom: 3.5
-//     }}
-//     style={{width: '100vw', height: '100vh'}}
-//     mapStyle="mapbox://styles/mapbox/streets-v9"
-//     mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN!}
-//   />;
-// }

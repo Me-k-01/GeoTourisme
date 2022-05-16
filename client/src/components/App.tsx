@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { Map, Location } from "./Map"
-import {Search, Adresse} from "./Search"
+import { Search, Adresse } from "./Search"
 import axios from 'axios';
 
 function App() {
@@ -11,15 +11,16 @@ function App() {
   return (
     <div>
       <header className="fixed-top">
-        <Search hideResult={hideResult} onSelect={(position) => {
-          setMarkers(markers => [...markers, position])
+        <Search hideResult={hideResult} onSelect={(loc) => {
+          console.log("Nouveau marqueur:", loc);
+          setMarkers(markers => [...markers, loc]);
         }} onSubmit={(str) => {
           setHideResult(false);
 
           try {
             if (str === "")
               setSearchResultat([]);
-            else 
+            else
               axios.get(`/contains/${str}`).then((resp: any) => {
                 console.log(resp.data);
                 setSearchResultat(resp.data);

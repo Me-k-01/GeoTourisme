@@ -1,8 +1,5 @@
-import { FC, useState } from "react"
-
-import { Map as MapBox, Layer, Marker } from 'react-map-gl'; 
-
- 
+import { FC, useEffect, useState } from "react"
+import { Map as MapBox, Layer, Marker } from 'react-map-gl';
 
 export type Location = {
   lat: number;
@@ -13,12 +10,34 @@ interface IMapProp {
   markers: Location[]
 }
 
-export const Map: FC<IMapProp> = ({markers}) => {
-
+export const Map: FC<IMapProp> = ({ markers }) => {
   const [pos, setPos] = useState<Location>({
     lat: 43.928902,
     long: 2.146400
   });
+
+  const updatePos = () => { // TODO: update toutes les secondes
+    if (!navigator.geolocation) {
+      console.error("Géolocalisation non supportée");
+      return;
+    }
+    navigator.geolocation.getCurrentPosition((pos) => {
+      console.log("Position actuelle du client:", pos);
+      setPos({
+        lat: pos.coords.latitude,
+        long: pos.coords.longitude
+      });
+    }, null, {
+      enableHighAccuracy: true,
+      timeout: 5000,
+      maximumAge: 0
+    });
+
+  }
+
+  useEffect(() => {
+    updatePos();
+  }, []);
 
   return <MapBox
     initialViewState={{
@@ -64,7 +83,9 @@ export const Map: FC<IMapProp> = ({markers}) => {
       }}
     />
     <Marker longitude={pos.long} latitude={pos.lat} color="#dd5555" anchor="bottom" />
-    {markers.map(({long, lat}) => <Marker longitude={long} latitude={lat} anchor="bottom" />)}
+    {markers.map(({ long, lat }) =>
+      <Marker longitude={long} latitude={lat} anchor="bottom" />
+    )}
   </MapBox>;
 }
 

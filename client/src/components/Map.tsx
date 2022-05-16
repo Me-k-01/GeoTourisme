@@ -4,18 +4,18 @@ import { Map as MapBox, Layer, Marker } from 'react-map-gl';
 
  
 
-export type Localisaiton = {
+export type Location = {
   lat: number;
   long: number;
 };
 
 interface IMapProp {
-  markers: Localisaiton[]
+  markers: Location[]
 }
 
 export const Map: FC<IMapProp> = ({markers}) => {
 
-  const [pos, setPos] = useState<Localisaiton>({
+  const [pos, setPos] = useState<Location>({
     lat: 43.928902,
     long: 2.146400
   });
@@ -63,7 +63,7 @@ export const Map: FC<IMapProp> = ({markers}) => {
         "fill-extrusion-opacity": 0.6
       }}
     />
-    <Marker longitude={pos.long} latitude={pos.lat} anchor="bottom" />
+    <Marker longitude={pos.long} latitude={pos.lat} color="#dd5555" anchor="bottom" />
     {markers.map(({long, lat}) => <Marker longitude={long} latitude={lat} anchor="bottom" />)}
   </MapBox>;
 }

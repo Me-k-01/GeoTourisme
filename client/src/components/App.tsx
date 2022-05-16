@@ -1,17 +1,19 @@
 import { useState } from "react";
-import { Map} from "./Map"
+import { Map, Location } from "./Map"
 import {Search, Adresse} from "./Search"
 import axios from 'axios';
 
 function App() {
   const [searchResultat, setSearchResultat] = useState<Adresse[]>([]);
   const [hideResult, setHideResult] = useState(true);
-  const [markers, setMarkers] = useState([{lat: 43.9304, long: 2.14427}]);
+  const [markers, setMarkers] = useState<Location[]>([]);
 
   return (
     <div>
       <header className="fixed-top">
-        <Search hideResult={hideResult} onSubmit={(str) => {
+        <Search hideResult={hideResult} onSelect={(position) => {
+          setMarkers(markers => [...markers, position])
+        }} onSubmit={(str) => {
           setHideResult(false);
 
           try {

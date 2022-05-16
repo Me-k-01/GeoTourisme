@@ -1,6 +1,9 @@
 import { useRef, useEffect } from "react"
 import mapboxgl  from "mapbox-gl"
-var turf = require('@turf/turf');
+import turf  from "turf"
+
+// var turf = require('@turf/turf');
+
 // Accès du token dans le fichier .en.local
 mapboxgl.accessToken = process.env.REACT_APP_MAPBOX_TOKEN!
 
@@ -26,7 +29,7 @@ export const Map = () => {
     }
 
     // Create a GeoJSON feature collection for drop-off locations
-    const dropoffs = turf.featureCollection(turf.point([loc.lat, loc.long]));
+    const dropoffs = turf.featureCollection([turf.point([loc.lat, loc.long])]);
 
     useEffect(() => {
         // réference d'API: https://docs.mapbox.com/mapbox-gl-js/api/map/

@@ -1,8 +1,7 @@
 import { useState } from "react";
 import { Map } from "./Map"
 import {Search, Adresse} from "./Search"
-
-const axios = require('axios');
+import axios from 'axios';
 
 function App() {
   const [searchResultat, setSearchResultat] = useState<Adresse[]>([]);

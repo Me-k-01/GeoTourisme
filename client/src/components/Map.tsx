@@ -80,9 +80,9 @@ export const Map: FC<IMapProp> = ({ markers }) => {
         "fill-extrusion-opacity": 0.6
       }}
     />
-    <Marker longitude={pos.long} latitude={pos.lat} color="#dd5555" anchor="bottom" />
+    <Marker longitude={pos.long} latitude={pos.lat} color="#dd5555" anchor="center" />
     {markers.map(({ long, lat }) =>
-      <Marker longitude={long} latitude={lat} anchor="bottom" />
+      <Marker longitude={long} latitude={lat} anchor="center" />
     )}
   </MapBox>;
 }

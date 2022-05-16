@@ -27,8 +27,7 @@ function App() {
             if (str === "")
               setSearchResultat([]);
             else
-              axios.get(`/contains/${str}`).then((resp: any) => {
-                console.log(resp.data);
+              axios.get(`/contains/${str}`).then((resp: any) => { 
                 setSearchResultat(resp.data);
               });
           } catch (err) {

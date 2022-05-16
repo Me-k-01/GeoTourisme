@@ -1,11 +1,12 @@
 import { useState } from "react";
-import { Map } from "./Map"
+import { Map} from "./Map"
 import {Search, Adresse} from "./Search"
 import axios from 'axios';
 
 function App() {
   const [searchResultat, setSearchResultat] = useState<Adresse[]>([]);
   const [hideResult, setHideResult] = useState(true);
+  const [markers, setMarkers] = useState([{lat: 43.9304, long: 2.14427}]);
 
   return (
     <div>
@@ -26,7 +27,7 @@ function App() {
           }
         }} resultat={searchResultat} />
       </header>
-      <Map />
+      <Map markers={markers} />
       <div>
 
       </div>

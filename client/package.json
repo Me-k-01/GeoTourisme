@@ -15,11 +15,11 @@
     "mapbox-gl": "^2.7.1",
     "react": "^17.0.2",
     "react-dom": "^17.0.2",
+    "react-map-gl": "^7.0.12",
     "react-scripts": "5.0.0",
     "sass": "^1.49.9",
     "semantic-ui-css": "^2.4.1",
     "semantic-ui-react": "^2.1.2",
-    "turf": "^3.0.14",
     "turf-featurecollection": "^1.0.1",
     "typescript": "^4.6.2",
     "web-vitals": "^2.1.4"

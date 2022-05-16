@@ -1,12 +1,22 @@
 import * as turf from "@turf/turf"
-import { FC, useCallback, useEffect, useState } from "react"
-import { Map as MapBox, Layer, Marker, GeolocateControl, Source } from 'react-map-gl';
-import map from "react-map-gl/dist/esm/components/map";
+import { FC, useEffect, useRef, useState } from "react"
+import { Map as MapBox, Layer, Marker, Source } from 'react-map-gl';
 
 export type Location = {
   lat: number;
   long: number;
 };
+
+interface Trip {
+  code: string;
+  waypoints: any[];
+  // trips: turf.Feature<any, any>[];
+  // trips: turf.Feature<turf.Geometry, turf.GeoJsonProperties>[];
+  // trips: {
+  //   geometry: string;
+  // }[];
+  trips: any;
+}
 
 interface IMapProp {
   markers: Location[]
@@ -17,9 +27,10 @@ export const Map: FC<IMapProp> = ({ markers }) => {
     lat: 43.928902,
     long: 2.146400
   });
+  const mapRef = useRef<any>();
 
   // const [route, setRoute ] = useState<turf.helpers.FeatureCollection<any, turf.Properties>>();
-  const [route, setRoute] = useState<turf.FeatureCollection<any, turf.Properties>>(turf.featureCollection([]));
+  const [route, setRoute] = useState<turf.FeatureCollection<any, any>>(turf.featureCollection([]));
 
   useEffect(() => {
     ///////// Géolocalisation /////////
@@ -48,13 +59,6 @@ export const Map: FC<IMapProp> = ({ markers }) => {
   //     ref.trigger();
   //   }
   // }, []);
-  interface Trip {
-    code: string;
-    waypoints: any[];
-    // trips: turf.Feature<any, any>[];
-    // trips: turf.Feature<turf.Geometry, turf.GeoJsonProperties>[];
-    trips: any;
-  }
   const getPath = async (): Promise<Trip | undefined> => {
     if (markers.length < 2) return;
 
@@ -73,16 +77,22 @@ export const Map: FC<IMapProp> = ({ markers }) => {
     console.log(response);
 
     // Creation d'un GeoJSON feature collection
-    setRoute(turf.featureCollection([
-      turf.feature(response.trips[0].geometry)
-    ]));
+    const routeGeoJSON = turf.featureCollection([
+      turf.feature(response.trips[0])
+    ]);
+    console.log(routeGeoJSON);
+    // TODO: trouver une solution
+    // setRoute(routeGeoJSON);  
+    
+    if (mapRef && mapRef.current) {  
+      mapRef.current.getSource('route').setData(routeGeoJSON); // Même la méthode classique ne marche pas
+    }
   }
-
   useEffect(() => {
     createPath();
   }, [markers, pos]);
 
-  return <MapBox
+  return <MapBox ref={mapRef}
     initialViewState={{
       longitude: pos.long,
       latitude: pos.lat,
@@ -128,7 +138,7 @@ export const Map: FC<IMapProp> = ({ markers }) => {
         "fill-extrusion-opacity": 0.6
       }}
     />
-    <Source id="route" type="geojson" data={route}>
+    <Source id="route" type="geojson" data={ route}>
       <Layer id='routeline-active' type='line'
         layout={{
           'line-join': 'round',

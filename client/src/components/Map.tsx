@@ -30,7 +30,8 @@ export const Map: FC<IMapProp> = ({ markers }) => {
   const mapRef = useRef<any>();
 
   // const [route, setRoute ] = useState<turf.helpers.FeatureCollection<any, turf.Properties>>();
-  const [route, setRoute] = useState<turf.FeatureCollection<any, any>>(turf.featureCollection([]));
+  // const [route, setRoute] = useState<turf.FeatureCollection<any, turf.Feature>>(turf.featureCollection([]));
+  const [route, setRoute] = useState(turf.featureCollection([]));
 
   useEffect(() => {
     ///////// Géolocalisation /////////
@@ -63,7 +64,7 @@ export const Map: FC<IMapProp> = ({ markers }) => {
     if (markers.length < 2) return;
 
     const coords = markers.map(({ long, lat }) => `${long},${lat}`).join(';');
-    const req = `https://api.mapbox.com/optimized-trips/v1/mapbox/driving/${pos.long},${pos.lat};${coords}?access_token=${process.env.REACT_APP_MAPBOX_TOKEN!}`;
+    const req = `https://api.mapbox.com/optimized-trips/v1/mapbox/driving/${pos.long},${pos.lat};${coords}?overview=full&steps=true&geometries=geojson&source=first&access_token=${process.env.REACT_APP_MAPBOX_TOKEN!}`;
     //&overview=full&steps=true&geometries=geojson&source=first&access_token=${}`
     const query = await fetch(req, { method: 'GET' });
     const response: Trip = await query.json();
@@ -78,14 +79,16 @@ export const Map: FC<IMapProp> = ({ markers }) => {
 
     // Creation d'un GeoJSON feature collection
     const routeGeoJSON = turf.featureCollection([
-      turf.feature(response.trips[0])
+      turf.feature(response.trips[0].geometry)
     ]);
+    // const feature = turf.feature(response.trips[0].geometry)
     console.log(routeGeoJSON);
     // TODO: trouver une solution
     // setRoute(routeGeoJSON);  
-    
-    if (mapRef && mapRef.current) {  
-      mapRef.current.getSource('route').setData(routeGeoJSON); // Même la méthode classique ne marche pas
+
+
+    if (mapRef && mapRef.current) {
+      mapRef.current.getSource('route').setData(routeGeoJSON); 
     }
   }
   useEffect(() => {
@@ -138,7 +141,7 @@ export const Map: FC<IMapProp> = ({ markers }) => {
         "fill-extrusion-opacity": 0.6
       }}
     />
-    <Source id="route" type="geojson" data={ route}>
+    <Source id="route" type="geojson" >
       <Layer id='routeline-active' type='line'
         layout={{
           'line-join': 'round',

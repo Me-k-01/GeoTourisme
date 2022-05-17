@@ -25,9 +25,12 @@ interface Trip {
 
 interface IMapProp {
     markers: Location[],
-    setMarkers: Function
+    markersSecondaires: Location[],
+    setMarkers: Function,
+    setMarkersSecondaires: Function
 }
-export const Map: FC<IMapProp> = ({ markers, setMarkers }) => {
+export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, setMarkersSecondaires }) => {
+    const allMarkers = markers.concat(markersSecondaires);
 
     const [pos, setPos] = useState<Location>({
         lat: 43.928902,
@@ -66,12 +69,12 @@ export const Map: FC<IMapProp> = ({ markers, setMarkers }) => {
   // }, []);
   useEffect(() => {
     const getPath = async (): Promise<Trip | undefined> => {
-      if (markers.length < 1) {
+      if (allMarkers.length < 1) {
         setRoute(turf.featureCollection([]));
         return;
       }
 
-      const coords = markers.map(({ long, lat }) => `${long},${lat}`).join(';');
+      const coords = allMarkers.map(({ long, lat }) => `${long},${lat}`).join(';');
       const req = `https://api.mapbox.com/optimized-trips/v1/mapbox/driving/${pos.long},${pos.lat};${coords}?overview=full&steps=true&geometries=geojson&source=first&access_token=${process.env.REACT_APP_MAPBOX_TOKEN!}`;
       //&overview=full&steps=true&geometries=geojson&source=first&access_token=${}`
       const query = await fetch(req, { method: 'GET' });
@@ -116,12 +119,13 @@ export const Map: FC<IMapProp> = ({ markers, setMarkers }) => {
             }
             console.log(loc);
             //Limitation du nombres de points:
-            if (markers.length >= 10) {
+            if (allMarkers.length >= 10) {
                 alert(`Votre parcours comporte trop de lieux.\n
                 Limitez vos choix pour en profiter.`);
             }
             else {
-                markers.push(loc);
+                markersSecondaires.push(loc);
+                setMarkersSecondaires(markersSecondaires);
             }
         }}
     >
@@ -193,11 +197,21 @@ export const Map: FC<IMapProp> = ({ markers, setMarkers }) => {
                     e.originalEvent.preventDefault();
                     setEditRoute(true);
                     const cond = (lng: number, lt: number) => lng === long && lt === lat;
-                    markers = markers.filter(loc => !cond(loc.long, loc.lat));
-                    setMarkers(markers);
+                    setMarkers(markers.filter(loc => !cond(loc.long, loc.lat)));
                 }}
             >
                 <i className="fa-solid  fa-landmark fa-2xl" ></i>
+            </Marker>
+        )}
+        {markersSecondaires.map(({ long, lat }, i) =>
+            <Marker key={i} longitude={long} latitude={lat} anchor="center"
+                onClick={function (e) {
+                    e.originalEvent.preventDefault();
+                    setEditRoute(true);
+                    const cond = (lng: number, lt: number) => lng === long && lt === lat;
+                    setMarkersSecondaires(markersSecondaires.filter(loc => !cond(loc.long, loc.lat)));
+                }}
+            >
             </Marker>
         )}
     </MapBox>;

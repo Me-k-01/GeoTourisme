@@ -9,6 +9,7 @@ function App() {
     const [searchResult, setSearchResult] = useState<Adresse[]>([]);
     const [hideResult, setHideResult] = useState(true);
     const [markers, setMarkers] = useState<Location[]>([]);
+    const [markersSecondaires, setMarkersSecondaires] = useState<Location[]>([]);
     const [showMenu, setShowMenu] = useState(true);
 
     const whenHidden = (className: string) => showMenu ? "" : "  " + className;
@@ -54,7 +55,7 @@ function App() {
                 </button>
 
             </div>
-            <Map markers={markers} setMarkers={setMarkers} />
+            <Map markers={markers} setMarkers={setMarkers} markersSecondaires={markersSecondaires} setMarkersSecondaires={setMarkersSecondaires} />
         </>
     );
 }

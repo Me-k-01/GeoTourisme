@@ -160,9 +160,9 @@ export const Map: FC<IMapProp> = ({ markers }) => {
           'text-halo-width': 3
         }} />
     </Source>
-    <Marker longitude={pos.long} latitude={pos.lat} color="#dd5555" anchor="bottom" />
+    <Marker longitude={pos.long} latitude={pos.lat} color="#dd5555" anchor="center" />
     {markers.map(({ long, lat }, i) =>
-      <Marker key={i} longitude={long} latitude={lat} anchor="bottom" />
+      <Marker key={i} longitude={long} latitude={lat} anchor="center" />
     )}
   </MapBox>;
 }

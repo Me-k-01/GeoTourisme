@@ -19,14 +19,13 @@ app.config['MYSQL_DATABASE_DB'] = bdd.database
 mysql.init_app(app)
 
 class near(Resource):
-    def get(self):
+    def get(self,lat,long):
+        
+        latitude = lat
+        longitude = long
+        
         try:
-            latitude = float(request.args.get('lat'))
-            longitude = float(request.args.get('long'))
-        except TypeError:
-            return []
-        try:
-            prox = float(request.args.get('prox'))
+            prox = 0.05 #float(request.args.get('prox'))
         except TypeError:
             prox = 0.001
         connect = mysql.get_db()
@@ -97,7 +96,7 @@ class contains(Resource):
     def delete(self):
         return self
 
-api.add_resource(near, '/near')
+api.add_resource(near, '/near/<lat>/<long>')
 api.add_resource(contains, '/contains/<str_w>')
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

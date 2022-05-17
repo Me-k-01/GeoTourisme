@@ -9,6 +9,9 @@ function App() {
   const [searchResult, setSearchResult] = useState<Adresse[]>([]);
   const [hideResult, setHideResult] = useState(true);
   const [markers, setMarkers] = useState<Location[]>([]);
+  const [showMenu, setShowMenu] = useState(true);
+
+  const whenHidden = (className: string) => showMenu ? "" : "  " + className;
 
   return (
     <>
@@ -27,7 +30,7 @@ function App() {
             console.log(err);
           }
         }} />
-        {! hideResult && <Scroller list={searchResult} onSelect={(loc) => {
+        {!hideResult && <Scroller list={searchResult} onSelect={(loc) => {
           // Verifie si le marqueur correspond au marqueur courrant
           const cond = ({ long, lat }: Location) => long === loc.long && lat === loc.lat;
 
@@ -38,7 +41,21 @@ function App() {
 
         }} />}
       </aside>
-      <Map markers={markers} setMarkers={setMarkers}/>
+      <div className="expander-wrapper">
+        <button className="expander" onClick={() => {
+          setShowMenu(!showMenu);
+          const interval = setInterval(() => {
+            window.dispatchEvent(new Event('resize'))
+          }, 10)
+          setTimeout(() => {
+            clearTimeout(interval);
+          }, 500);
+        }}>
+          <i className={"fa-solid fa-caret-left" + whenHidden("rotate")} />
+        </button>
+
+      </div>
+      <Map markers={markers} setMarkers={setMarkers} />
     </>
   );
 }

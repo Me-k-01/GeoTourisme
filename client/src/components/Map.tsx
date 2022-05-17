@@ -1,5 +1,5 @@
 import * as turf from "@turf/turf"
-import { FC, useEffect, useRef, useState } from "react"
+import { FC, useEffect, useState } from "react"
 import { Map as MapBox, Layer, Marker, Source } from 'react-map-gl';
 
 export type Location = {
@@ -7,31 +7,30 @@ export type Location = {
   long: number;
 };
 
+type Geometry = {
+  type: "Point";
+  coordinates: number[];
+};
+
+
 interface Trip {
   code: string;
   waypoints: any[];
-  // trips: turf.Feature<any, any>[];
-  // trips: turf.Feature<turf.Geometry, turf.GeoJsonProperties>[];
-  // trips: {
-  //   geometry: string;
-  // }[];
-  trips: any;
+  trips: {
+    geometry: Geometry;
+  }[];
 }
 
 interface IMapProp {
   markers: Location[]
 }
-
 export const Map: FC<IMapProp> = ({ markers }) => {
   const [pos, setPos] = useState<Location>({
     lat: 43.928902,
     long: 2.146400
   });
-  const mapRef = useRef<any>();
 
-  // const [route, setRoute ] = useState<turf.helpers.FeatureCollection<any, turf.Properties>>();
-  // const [route, setRoute] = useState<turf.FeatureCollection<any, turf.Feature>>(turf.featureCollection([]));
-  const [route, setRoute] = useState(turf.featureCollection([]));
+  const [route, setRoute] = useState<turf.FeatureCollection<Geometry, {}>>(turf.featureCollection([]));
 
   useEffect(() => {
     ///////// Géolocalisation /////////
@@ -61,7 +60,10 @@ export const Map: FC<IMapProp> = ({ markers }) => {
   //   }
   // }, []);
   const getPath = async (): Promise<Trip | undefined> => {
-    if (markers.length < 2) return;
+    if (markers.length < 1) {
+      setRoute(turf.featureCollection([]));
+      return;
+    }
 
     const coords = markers.map(({ long, lat }) => `${long},${lat}`).join(';');
     const req = `https://api.mapbox.com/optimized-trips/v1/mapbox/driving/${pos.long},${pos.lat};${coords}?overview=full&steps=true&geometries=geojson&source=first&access_token=${process.env.REACT_APP_MAPBOX_TOKEN!}`;
@@ -74,28 +76,19 @@ export const Map: FC<IMapProp> = ({ markers }) => {
 
   const createPath = async () => {
     const response = await getPath();
-    if (!response) return;
-    console.log(response);
+    if (!response) return; 
 
-    // Creation d'un GeoJSON feature collection
-    const routeGeoJSON = turf.featureCollection([
+    // Creation d'un GeoJSON feature collection 
+    const routeGeoJSON: turf.FeatureCollection<Geometry, {}> = turf.featureCollection([
       turf.feature(response.trips[0].geometry)
-    ]);
-    // const feature = turf.feature(response.trips[0].geometry)
-    console.log(routeGeoJSON);
-    // TODO: trouver une solution
-    // setRoute(routeGeoJSON);  
-
-
-    if (mapRef && mapRef.current) {
-      mapRef.current.getSource('route').setData(routeGeoJSON); 
-    }
+    ]); 
+    setRoute(routeGeoJSON);
   }
   useEffect(() => {
     createPath();
   }, [markers, pos]);
 
-  return <MapBox ref={mapRef}
+  return <MapBox
     initialViewState={{
       longitude: pos.long,
       latitude: pos.lat,
@@ -141,7 +134,8 @@ export const Map: FC<IMapProp> = ({ markers }) => {
         "fill-extrusion-opacity": 0.6
       }}
     />
-    <Source id="route" type="geojson" >
+
+    <Source id="route" type="geojson" data={route}>
       <Layer id='routeline-active' type='line'
         layout={{
           'line-join': 'round',

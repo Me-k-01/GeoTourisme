@@ -12,7 +12,6 @@ type Geometry = {
   coordinates: number[];
 };
 
-
 interface Trip {
   code: string;
   waypoints: any[];
@@ -34,7 +33,6 @@ export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, set
   });
 
   const [route, setRoute] = useState<turf.FeatureCollection<Geometry, {}>>(turf.featureCollection([]));
-  const [editRoute, setEditRoute] = useState<boolean>(false);
 
   useEffect(() => {
     ///////// Géolocalisation /////////
@@ -56,13 +54,7 @@ export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, set
       }, 5000);
     ///////////////////////////////
   }, []);
-
-  // const geolocateControlRef = useCallback((ref) => {
-  //   if (ref) {
-  //     // Activate as soon as the control is loaded
-  //     ref.trigger();
-  //   }
-  // }, []);
+ 
   const removeMarker = (markers: Location[], marker: Location) =>
     markers.filter(({ long, lat }) =>
       marker.long !== long || marker.lat !== lat
@@ -73,7 +65,7 @@ export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, set
       const allMarkers = markers.concat(markersSecondaires);
 
       if (allMarkers.length < 1) {
-        setRoute(turf.featureCollection([]));
+        setRoute(turf.featureCollection([])); // Reset 
         return;
       }
 
@@ -109,29 +101,20 @@ export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, set
     mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN!} // Accès du token dans le fichier .en.local
     mapStyle="mapbox://styles/mapbox/streets-v11"
     onClick={(evt) => {
-      evt.preventDefault();
-      if (editRoute) {
-        setEditRoute(false);
-        return;
-      } 
+      evt.preventDefault(); 
       const pos = evt.lngLat;
       const loc = {
         lat: pos.lat,
         long: pos.lng
       } 
-      //Limitation du nombres de points:
+      // Limitation du nombres de points:
       if (markers.length + markersSecondaires.length > 10) {
         alert(`Votre parcours comporte trop de lieux.\nLimitez vos choix pour en profiter.`);
       } else {
         setMarkersSecondaires([...markersSecondaires, loc]);
       }
     }}
-  >
-    {/* <GeolocateControl ref={geolocateControlRef} trackUserLocation={true}
-      onGeolocate={(pos) => {
-        console.log("pos:", pos); 
-      }}
-    /> */}
+  > 
     <Layer id="add-3d-buildings" source="composite" source-layer="building"
       filter={["==", "extrude", "true"]}
       type="fill-extrusion"
@@ -192,9 +175,9 @@ export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, set
     {markers.map((currMarker, i) =>
       <Marker key={i} longitude={currMarker.long} latitude={currMarker.lat} anchor="center"
         onClick={(evt) => {
-          evt.originalEvent.preventDefault();
-          setEditRoute(true);
+          evt.originalEvent.preventDefault(); 
           setMarkers(removeMarker(markers, currMarker));
+          evt.originalEvent.stopPropagation();
         }}
       >
         <i className="fa-solid  fa-landmark fa-2xl" ></i>
@@ -203,9 +186,9 @@ export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, set
     {markersSecondaires.map((currMarker, i) =>
       <Marker key={i} longitude={currMarker.long} latitude={currMarker.lat} anchor="center"
         onClick={(evt) => {
-          evt.originalEvent.preventDefault();
-          setEditRoute(true);
+          evt.originalEvent.preventDefault(); 
           setMarkersSecondaires(removeMarker(markersSecondaires, currMarker));
+          evt.originalEvent.stopPropagation();
         }}
       >
       </Marker>

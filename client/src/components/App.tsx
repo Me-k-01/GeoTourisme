@@ -11,7 +11,7 @@ function App() {
   const [markers, setMarkers] = useState<Location[]>([]);
   const [showMenu, setShowMenu] = useState(true);
 
-  const whenHidden = (className: string) => showMenu ? " " + className : "";
+  const whenHidden = (className: string) => showMenu ? "" : "  " + className;
 
   return (
     <>
@@ -43,6 +43,12 @@ function App() {
       <div className="expander-wrapper">
         <button className="expander" onClick={() => {
           setShowMenu(!showMenu);
+          const interval = setInterval(() => {
+            window.dispatchEvent(new Event('resize'))
+          }, 10)
+          setTimeout(() => {
+            clearTimeout(interval);
+          }, 500);
         }}>
           <i className={"fa-solid fa-caret-left" + whenHidden("rotate")} />
         </button>

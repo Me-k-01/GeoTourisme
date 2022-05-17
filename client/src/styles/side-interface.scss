@@ -1,48 +1,52 @@
 .side-interface {
-	// width: 50%;
-	display: flex;
-	align-items: center;
-	flex-direction: column;
+  width: 30%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  color: rgba(255, 255, 255, 0.8);
 
-	form {
-		text-align: center;
-		// padding: 10px 0px;
-		// background-color: rgba(0, 0, 0, .5);
-		display: flex;
-		border-radius: 1rem;
-		overflow: hidden;
-		margin: 10px;  
-		height: 50px; 
+  form {
+    text-align: center; 
+    display: flex;
+    border-radius: 1rem;
+    overflow: hidden; 
+	margin: 1rem;
+    width: calc(80% - 20px);
+    min-height: 2em;
 
-		input {
-			padding-left: 10px;
-			// border-width: 0px 2px 0px 0px;
-			// border-radius: 10px 0 0 10px;
-			border: none; 
-			height: 100%; 
-
-			color: white;
-			font-weight: bold; 
-			background-color: rgba(0, 0, 0, .5);
-			&::placeholder {
-				color: rgba(255, 255, 255, .75);
-			}
-		}
-		button {
-			height: 25px;
-			border-width: 0px;
-			border-radius: 0 10px 10px 0;
-			background-color: rgb(64, 64, 64);
-			color: rgba(255, 255, 255, .75);
-			font-weight: bold;
-		}
-	}
+    input {
+      padding-left: 10px;
+      // border-width: 0px 2px 0px 0px;
+      // border-radius: 10px 0 0 10px;
+      border: none;
+      height: 100%;
+      flex-grow: 1;
+      font-weight: bold;
+	  color: inherit;
+      background-color: rgba(0, 0, 0, 0.5);
+      &::placeholder {
+		color: inherit;
+      }
+    }
+    button {
+      border-width: 0px;
+      border-radius: 0 10px 10px 0;
+      background-color: rgb(64, 64, 64);
+	  color: inherit;
+      font-weight: bold;
+      padding: 5px;
+      transition: 0.2s;
+    }
+    button:hover {
+      background-color: #6c6c6c;
+    }
+  }
 }
 
 input {
-	&:focus {
-		outline: none;
-	}
+  &:focus {
+    outline: none;
+  }
 }
 
 // .marker {

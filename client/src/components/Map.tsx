@@ -59,34 +59,34 @@ export const Map: FC<IMapProp> = ({ markers }) => {
   //     ref.trigger();
   //   }
   // }, []);
-  const getPath = async (): Promise<Trip | undefined> => {
-    if (markers.length < 1) {
-      setRoute(turf.featureCollection([]));
-      return;
+  useEffect(() => {
+    const getPath = async (): Promise<Trip | undefined> => {
+      if (markers.length < 1) {
+        setRoute(turf.featureCollection([]));
+        return;
+      }
+
+      const coords = markers.map(({ long, lat }) => `${long},${lat}`).join(';');
+      const req = `https://api.mapbox.com/optimized-trips/v1/mapbox/driving/${pos.long},${pos.lat};${coords}?overview=full&steps=true&geometries=geojson&source=first&access_token=${process.env.REACT_APP_MAPBOX_TOKEN!}`;
+      //&overview=full&steps=true&geometries=geojson&source=first&access_token=${}`
+      const query = await fetch(req, { method: 'GET' });
+      const response: Trip = await query.json();
+      if (response.code !== 'Ok') return;
+      return response;
     }
 
-    const coords = markers.map(({ long, lat }) => `${long},${lat}`).join(';');
-    const req = `https://api.mapbox.com/optimized-trips/v1/mapbox/driving/${pos.long},${pos.lat};${coords}?overview=full&steps=true&geometries=geojson&source=first&access_token=${process.env.REACT_APP_MAPBOX_TOKEN!}`;
-    //&overview=full&steps=true&geometries=geojson&source=first&access_token=${}`
-    const query = await fetch(req, { method: 'GET' });
-    const response: Trip = await query.json();
-    if (response.code !== 'Ok') return;
-    return response;
-  }
+    const createPath = async () => {
+      const response = await getPath();
+      if (!response) return;
 
-  const createPath = async () => {
-    const response = await getPath();
-    if (!response) return;
-
-    // Creation d'un GeoJSON feature collection 
-    const routeGeoJSON: turf.FeatureCollection<Geometry, {}> = turf.featureCollection([
-      turf.feature(response.trips[0].geometry)
-    ]);
-    setRoute(routeGeoJSON);
-  }
-  useEffect(() => {
+      // Creation d'un GeoJSON feature collection 
+      const routeGeoJSON: turf.FeatureCollection<Geometry, {}> = turf.featureCollection([
+        turf.feature(response.trips[0].geometry)
+      ]);
+      setRoute(routeGeoJSON);
+    }
     createPath();
-  }, [markers, pos]);
+  }, [markers, pos]); // S'il y a un changement de marqueurs ou de position on update le chemin
 
   return <MapBox
     initialViewState={{
@@ -96,7 +96,7 @@ export const Map: FC<IMapProp> = ({ markers }) => {
       pitch: 50,
     }}
     mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN!} // Accès du token dans le fichier .en.local
-    style={{  flexGrow: 1, width: "100%" }}
+    style={{ flexGrow: 1, width: "100%" }}
     mapStyle="mapbox://styles/mapbox/streets-v11"
   >
     {/* <GeolocateControl ref={geolocateControlRef} trackUserLocation={true}

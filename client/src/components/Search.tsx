@@ -1,15 +1,14 @@
 import { FC } from "react";
-import {Adresse} from "../Adresse";
 
 interface ISearchProps {
-    onSubmit: (input: string) => void; 
+    onSubmit: (input: string) => void;
 }
 
 export const Search: FC<ISearchProps> = ({ onSubmit }) => {
     let input = "";
 
     return (
-        <form action="/" method="get"> 
+        <form action="/" method="get">
             <input
                 onInput={e => input = e.currentTarget.value}
                 type="text"
@@ -20,8 +19,6 @@ export const Search: FC<ISearchProps> = ({ onSubmit }) => {
                 onSubmit(input);
             }}><i className="fa-solid fa-magnifying-glass"></i></button>
         </form>
-            
-
     )
 };
 

@@ -5,8 +5,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: rgb(37, 37, 37);
-}
   
+} 
 html, body, #root {
   margin: 0;
   padding: 0;
@@ -22,4 +22,11 @@ li {
 }
 button {
   cursor: pointer;
+}
+input {
+  outline: none;
+}
+
+.rotate {
+  transform: rotate(180deg);
 }

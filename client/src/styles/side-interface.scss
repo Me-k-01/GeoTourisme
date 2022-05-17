@@ -1,16 +1,21 @@
 .side-interface {
-  width: 30%;
+  width: max(30%, 200px);
   display: flex;
   align-items: center;
   flex-direction: column;
   color: rgba(255, 255, 255, 0.8);
+  transition: 0.5s;
+  &.closed {
+    width: 0;
+    overflow: hidden;
+  }
 
   form {
-    text-align: center; 
+    text-align: center;
     display: flex;
     border-radius: 1rem;
-    overflow: hidden; 
-	margin: 1rem;
+    overflow: hidden;
+    margin: 1rem;
     width: calc(80% - 20px);
     min-height: 2em;
 
@@ -22,17 +27,17 @@
       height: 100%;
       flex-grow: 1;
       font-weight: bold;
-	  color: inherit;
+      color: inherit;
       background-color: rgba(0, 0, 0, 0.5);
       &::placeholder {
-		color: inherit;
+        color: inherit;
       }
     }
     button {
       border-width: 0px;
       border-radius: 0 10px 10px 0;
       background-color: rgb(64, 64, 64);
-	  color: inherit;
+      color: inherit;
       font-weight: bold;
       padding: 5px;
       transition: 0.2s;
@@ -43,9 +48,19 @@
   }
 }
 
-input {
-  &:focus {
-    outline: none;
+.expand {
+  border: none;
+  outline: none;
+  color: white;
+  background-color: inherit;
+  font-size: 1.5rem;
+  transition: 0.2s;
+  i {
+    transition: 0.5s;
+  }
+
+  &:hover {
+    background-color: rgb(64, 64, 64);
   }
 }
 

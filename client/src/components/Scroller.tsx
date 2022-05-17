@@ -13,9 +13,7 @@ export const Scroller: FC<IScrollerProps> = ({ list, onSelect }) => {
             <ul className="scroller">
                 {list.map((address, i) =>
                     <li key={i}>
-                        <div className='select' onClick={() => {
-                            onSelect(address)
-                        }}>
+                        <div className='select' onClick={() => onSelect(address)}>
                             <h3>{address.nom}</h3>
                             <p>{address.adresse}</p>
                         </div>

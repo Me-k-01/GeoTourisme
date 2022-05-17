@@ -20,14 +20,16 @@ mysql.init_app(app)
 
 class near(Resource):
     def get(self,lat,long):
+
+        print("latitude : " + lat)
+
+        prox = 0.05 #float(request.args.get('prox'))
         
-        latitude = lat
-        longitude = long
+        latMoyenneM = float(lat)-prox
+        latMoyenneP = float(lat)+prox
+        longMoyenneM = float(long)-prox
+        longMoyenneP = float(long)+prox
         
-        try:
-            prox = 0.05 #float(request.args.get('prox'))
-        except TypeError:
-            prox = 0.001
         connect = mysql.get_db()
         cursor = connect.cursor()
         requete = """SELECT
@@ -37,9 +39,9 @@ class near(Resource):
                      NATURAL JOIN
                         Visite
                      WHERE
-                        (latitude BETWEEN """ + str(latitude-prox) + " AND " + str(latitude+prox) +""")
+                        (latitude BETWEEN """ + str(latMoyenneM) + " AND " + str(latMoyenneP) +""")
                      AND
-                        (longitude BETWEEN """ + str(longitude-prox) + " AND " + str(longitude+prox)+")"
+                        (longitude BETWEEN """ + str(longMoyenneM) + " AND " + str(longMoyenneP)+")"
         cursor.execute(requete)
         data = cursor.fetchall()
         lst = []

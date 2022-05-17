@@ -1,4 +1,5 @@
 import * as turf from "@turf/turf"
+import axios from 'axios';
 import { FC, useEffect, useState } from "react"
 import { Map as MapBox, Layer, Marker, Source } from 'react-map-gl';
 
@@ -90,6 +91,24 @@ export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, set
     }
     createPath();
   }, [markers, markersSecondaires, pos]); // S'il y a un changement de marqueurs ou de position on update le chemin 
+
+  //Toutes les 2s on va regarder ce qu'il y a autour
+  function nearby(latbis : any,longbis : any){
+    console.log("exploration de lat : " + latbis + " long : " + longbis);
+
+    try {
+      axios.get(`/near/${latbis}/${longbis}`).then((resp: any) => {
+        console.log(resp)
+      });
+    } catch (err) {
+      console.log(err);
+    }
+
+    //setTimeout(nearby,10000);
+  }
+
+  //nearby(43.928902,2.146400);
+  //nearby(lat,long);
 
   return <MapBox
     initialViewState={{

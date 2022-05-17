@@ -30,7 +30,7 @@ function App() {
             console.log(err);
           }
         }} />
-        {! hideResult && <Scroller list={searchResult} onSelect={(loc) => {
+        {!hideResult && <Scroller list={searchResult} onSelect={(loc) => {
           // Verifie si le marqueur correspond au marqueur courrant
           const cond = ({ long, lat }: Location) => long === loc.long && lat === loc.lat;
 
@@ -40,9 +40,14 @@ function App() {
             setMarkers(markers.filter(loc => !cond(loc)));
         }} />}
       </aside>
-      <button className="expand" onClick={() => {
-        setShowMenu(! showMenu);
-      }}><i className={"fa-solid fa-caret-left" +  whenHidden("rotate") } ></i></button>
+      <div className="expander-wrapper">
+        <button className="expander" onClick={() => {
+          setShowMenu(!showMenu);
+        }}>
+          <i className={"fa-solid fa-caret-left" + whenHidden("rotate")} />
+        </button>
+
+      </div>
       <Map markers={markers} />
     </>
   );

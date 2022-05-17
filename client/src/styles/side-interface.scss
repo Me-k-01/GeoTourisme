@@ -21,13 +21,12 @@
 
     input {
       padding-left: 10px;
-      // border-width: 0px 2px 0px 0px;
-      // border-radius: 10px 0 0 10px;
       border: none;
       height: 100%;
       flex-grow: 1;
       font-weight: bold;
       color: inherit;
+	//   min-width: 200px;
       background-color: rgba(0, 0, 0, 0.5);
       &::placeholder {
         color: inherit;
@@ -48,13 +47,28 @@
   }
 }
 
-.expand {
+.expander-wrapper {
+  overflow: visible;
+  width: 10px;
+  background-color: inherit;
+  margin: auto 0;
+}
+
+.expander {
   border: none;
   outline: none;
   color: white;
-  background-color: inherit;
+  z-index: 50;
+  position: relative;
+  background-color: rgb(37, 37, 37); 
+//   border-radius: 50px;
+  border-top-right-radius: 50px;
+  border-bottom-right-radius: 50px;
+  width: 35px; height: 50px;
+  line-height: 50px;
   font-size: 1.5rem;
-  transition: 0.2s;
+  transition: 0.2s; 
+
   i {
     transition: 0.5s;
   }

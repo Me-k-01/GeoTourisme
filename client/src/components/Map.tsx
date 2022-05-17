@@ -96,7 +96,7 @@ export const Map: FC<IMapProp> = ({ markers }) => {
       pitch: 50,
     }}
     mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN!} // Accès du token dans le fichier .en.local
-    style={{  flexGrow: 1, width: "auto" }}
+    style={{  flexGrow: 1, width: "100%" }}
     mapStyle="mapbox://styles/mapbox/streets-v11"
   >
     {/* <GeolocateControl ref={geolocateControlRef} trackUserLocation={true}

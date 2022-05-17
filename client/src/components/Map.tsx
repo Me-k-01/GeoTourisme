@@ -76,12 +76,12 @@ export const Map: FC<IMapProp> = ({ markers }) => {
 
   const createPath = async () => {
     const response = await getPath();
-    if (!response) return; 
+    if (!response) return;
 
     // Creation d'un GeoJSON feature collection 
     const routeGeoJSON: turf.FeatureCollection<Geometry, {}> = turf.featureCollection([
       turf.feature(response.trips[0].geometry)
-    ]); 
+    ]);
     setRoute(routeGeoJSON);
   }
   useEffect(() => {
@@ -96,7 +96,7 @@ export const Map: FC<IMapProp> = ({ markers }) => {
       pitch: 50,
     }}
     mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN!} // Accès du token dans le fichier .en.local
-    style={{ width: '100vw', height: '100vh' }}
+    // style={{  flexGrow: 1 }}
     mapStyle="mapbox://styles/mapbox/streets-v11"
   >
     {/* <GeolocateControl ref={geolocateControlRef} trackUserLocation={true}
@@ -162,7 +162,10 @@ export const Map: FC<IMapProp> = ({ markers }) => {
     </Source>
     <Marker longitude={pos.long} latitude={pos.lat} color="#dd5555" anchor="center" />
     {markers.map(({ long, lat }, i) =>
-      <Marker key={i} longitude={long} latitude={lat} anchor="center" />
+      <Marker key={i} longitude={long} latitude={lat} anchor="center">
+
+        <i className="fa-solid  fa-landmark fa-2xl"></i>
+      </Marker>
     )}
   </MapBox>;
 }

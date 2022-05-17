@@ -1,0 +1,55 @@
+.side-interface {
+	// width: 50%;
+	display: flex;
+	align-items: center;
+	flex-direction: column;
+
+	form {
+		text-align: center;
+		// padding: 10px 0px;
+		// background-color: rgba(0, 0, 0, .5);
+		display: flex;
+		border-radius: 1rem;
+		overflow: hidden;
+		margin: 10px;  
+		height: 50px; 
+
+		input {
+			padding-left: 10px;
+			// border-width: 0px 2px 0px 0px;
+			// border-radius: 10px 0 0 10px;
+			border: none; 
+			height: 100%; 
+
+			color: white;
+			font-weight: bold; 
+			background-color: rgba(0, 0, 0, .5);
+			&::placeholder {
+				color: rgba(255, 255, 255, .75);
+			}
+		}
+		button {
+			height: 25px;
+			border-width: 0px;
+			border-radius: 0 10px 10px 0;
+			background-color: rgb(64, 64, 64);
+			color: rgba(255, 255, 255, .75);
+			font-weight: bold;
+		}
+	}
+}
+
+input {
+	&:focus {
+		outline: none;
+	}
+}
+
+// .marker {
+// 	width: 20px;
+// 	height: 20px;
+// 	border: 2px solid #fff;
+// 	border-radius: 50%;
+// 	background: #3887be;
+// 	pointer-events: none;
+// }

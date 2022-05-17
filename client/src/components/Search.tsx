@@ -1,51 +1,15 @@
 import { FC } from "react";
-
-export interface Adresse {
-    nom: string;
-    adresse: string;
-    lat: number;
-    long: number;
-}
- 
-interface IScrollerProps {
-    list: Adresse[];
-    onSelect: (address: Adresse) => void; 
-};
-
-const Scroller: FC<IScrollerProps> = ({ list, onSelect}) => {
-    return (
-        list.length === 0 ?
-            <div>Pas de resultat</div> :
-            <ul className="scroller">
-                {list.map((address, i) =>
-                    <li key={i}>
-                        <div className='select' onClick={() => {
-                            onSelect(address)
-                        }}>
-                            <h4>{address.nom}</h4>
-                            <p>{address.adresse}</p>
-                        </div>
-                    </li>
-                )}
-            </ul>
-    );
-}
+import {Adresse} from "../Adresse";
 
 interface ISearchProps {
-    onSubmit: (input: string) => void;
-    resultat: Adresse[];
-    hideResult: boolean;
-    onSelect: (address: Adresse) => void; // selection d'un point d'intéret
+    onSubmit: (input: string) => void; 
 }
 
-export const Search: FC<ISearchProps> = ({ onSubmit, resultat, hideResult, onSelect }) => {
+export const Search: FC<ISearchProps> = ({ onSubmit }) => {
     let input = "";
 
     return (
-        <form action="/" method="get">
-            <label htmlFor="header-search">
-                <span className="visually-hidden">Nom du lieu :</span>
-            </label>
+        <form action="/" method="get"> 
             <input
                 onInput={e => input = e.currentTarget.value}
                 type="text"
@@ -54,9 +18,9 @@ export const Search: FC<ISearchProps> = ({ onSubmit, resultat, hideResult, onSel
             <button type="submit" onClick={(e) => {
                 e.preventDefault();
                 onSubmit(input);
-            }}>Rechercher</button>
-            {! hideResult && <Scroller list={resultat} onSelect={onSelect} />}
+            }}><i className="fa-solid fa-magnifying-glass"></i></button>
         </form>
+            
 
     )
 };

@@ -9,13 +9,10 @@ function App() {
   const [searchResult, setSearchResult] = useState<Adresse[]>([]);
   const [hideResult, setHideResult] = useState(true);
   const [markers, setMarkers] = useState<Location[]>([]);
-  const [showMenu, setShowMenu] = useState(true);
-
-  const whenHidden = (className: string) => showMenu ? " " + className : "";
 
   return (
     <>
-      <aside className={"side-interface" + whenHidden("closed")}>
+      <aside className="side-interface">
         <Search onSubmit={(str) => {
           setHideResult(false);
 
@@ -38,12 +35,10 @@ function App() {
             setMarkers(markers => [...markers, loc]);
           else // retirer le marqueur
             setMarkers(markers.filter(loc => !cond(loc)));
+
         }} />}
       </aside>
-      <button className="expand" onClick={() => {
-        setShowMenu(! showMenu);
-      }}><i className={"fa-solid fa-caret-left" +  whenHidden("rotate") } ></i></button>
-      <Map markers={markers} />
+      <Map markers={markers} setMarkers={setMarkers}/>
     </>
   );
 }

@@ -5,6 +5,8 @@ from flask_restful import Resource, Api, reqparse
 from flaskext.mysql import MySQL
 from urllib.parse import urlparse
 from datetime import date, datetime
+
+from requests import delete
 import bdd
 
 app = Flask(__name__)
@@ -56,12 +58,6 @@ class near(Resource):
             lst.append(tmp)
         return jsonify(lst)
 
-    def post(self):
-        return self
-
-    def delete(self):
-        return self
-
 class contains(Resource):
     def get(self,str_w):
         #str_w = request.args.get('words')
@@ -96,7 +92,30 @@ class contains(Resource):
             lst.append(tmp)
         return jsonify(lst)
 
-    def post(self):
+class note(Resource):
+    def get(self,nom_l):
+        #str_w = request.args.get('words')
+        if nom_l == None:
+            return []
+        connect = mysql.get_db()
+        cursor = connect.cursor()
+        requete = """SELECT
+                        nom, note
+                     FROM
+                        Notation
+                     WHERE nom=""" + '"' + nom_l + '"'
+        cursor.execute(requete)
+        data = cursor.fetchall()
+        lst = []
+        for d in data:
+            tmp = dict()
+            tmp.update({'nom': d[0]})
+            tmp.update({'note': d[1]})
+            lst.append(tmp)
+        return jsonify(lst)
+
+    def post(self,nom_l):
+        
         return self
 
     def delete(self):
@@ -104,5 +123,6 @@ class contains(Resource):
 
 api.add_resource(near, '/near/<lat>/<long>')
 api.add_resource(contains, '/contains/<str_w>')
+api.add_resource(note, '/note/<nom_l>')
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

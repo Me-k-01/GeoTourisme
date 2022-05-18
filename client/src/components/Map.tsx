@@ -92,8 +92,8 @@ export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, set
     createPath();
   }, [markers, markersSecondaires, pos]); // S'il y a un changement de marqueurs ou de position on update le chemin 
 
-  //Toutes les 2s on va regarder ce qu'il y a autour
-  function nearby(latbis : any,longbis : any){
+  //Toutes les 5s on va regarder ce qu'il y a autour
+  function nearby(latbis : number,longbis : number){
     console.log("exploration de lat : " + latbis + " long : " + longbis);
 
     try {
@@ -105,10 +105,26 @@ export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, set
     }
 
     //setTimeout(nearby,10000);
-  }
+  };
 
-  //nearby(43.928902,2.146400);
   //nearby(lat,long);
+
+  //fonction récupération de la note
+  //Entrée : nom du lieu ; Sortie : nom + note du lieux
+
+  function showMark(nom : string){
+    console.log("Quel est la note de " + nom + " ?");
+
+    try {
+      axios.get(`/note/${nom}`).then((resp: any) => {
+        return(resp.data[0].note)
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  //showMark("Cathedrale Sainte-Cecile");
 
   return <MapBox
     initialViewState={{

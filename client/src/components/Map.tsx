@@ -110,14 +110,15 @@ export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, set
   //nearby(lat,long);
 
   //fonction récupération de la note
-  //Entrée : nom du lieu ; Sortie : nom + note du lieux
+  //Entrée : nom du lieu ; Sortie : note moyenne du lieux
 
   function showMark(nom : string){
-    console.log("Quel est la note de " + nom + " ?");
+    console.log("Quel est la moyenne de " + nom + " ?");
 
     try {
-      axios.get(`/note/${nom}`).then((resp: any) => {
-        return(resp.data[0].note)
+      axios.get(`/noteM/${nom}`).then((resp: any) => {
+        console.log(resp.data)
+        return(resp)
       });
     } catch (err) {
       console.log(err);
@@ -125,6 +126,24 @@ export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, set
   };
 
   //showMark("Cathedrale Sainte-Cecile");
+
+  //fonction ajouter une note
+  //Entrées : nom du lieu + note utilisateur + id utilisateur
+
+  function addMark(nom : string, note : number , id : number){
+    console.log("ajout à " + nom + " la note " + note + " de la part de " + id);
+
+    try {
+      axios.post(`/addNote/${nom}/${note}/${id}`).then((resp: any) => {
+        console.log(resp.data)
+        return(resp)
+      });
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  addMark("Cathedrale Sainte-Cecile",4,4);
 
   return <MapBox
     initialViewState={{

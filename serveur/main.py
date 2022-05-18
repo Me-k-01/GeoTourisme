@@ -92,7 +92,7 @@ class contains(Resource):
             lst.append(tmp)
         return jsonify(lst)
 
-class note(Resource):
+class noteMoyenne(Resource):
     def get(self,nom_l):
         #str_w = request.args.get('words')
         if nom_l == None:
@@ -100,29 +100,42 @@ class note(Resource):
         connect = mysql.get_db()
         cursor = connect.cursor()
         requete = """SELECT
-                        nom, note
+                        note
                      FROM
                         Notation
                      WHERE nom=""" + '"' + nom_l + '"'
         cursor.execute(requete)
         data = cursor.fetchall()
-        lst = []
+        moy = 0
         for d in data:
-            tmp = dict()
-            tmp.update({'nom': d[0]})
-            tmp.update({'note': d[1]})
-            lst.append(tmp)
-        return jsonify(lst)
+            moy=moy+int(d[0])
+        return (moy/len(data))
 
-    def post(self,nom_l):
-        
-        return self
-
-    def delete(self):
-        return self
+class ajouterNote(Resource):
+    def post(self,nom_l,note,id):
+        #l'utilisateur a t-il déja mis une note pour ce lieu ?
+        connect = mysql.get_db()
+        cursor = connect.cursor()
+        requeteExiste = "SELECT * FROM Notation WHERE id=" + id + " AND nom=" + '"' + nom_l + '"'
+        cursor.execute(requeteExiste)
+        data=cursor.fetchall()
+        if data : 
+            print("update note")
+            requeteUpdate = "UPDATE Notation SET id=" + id + ", nom=" + '"' + nom_l + '"' + ", note=" + note + " WHERE id=" + id + " AND nom=" + '"' + nom_l + '"'
+            cursor.execute(requeteUpdate)
+            connect.commit()
+            return("modification réussi")
+        else :
+            print("data n'existe pas")
+            #INSERT INTO `Notation`(`id`, `nom`, `note`) VALUES (4,"Cathédrale Sainte-Cécile",3)
+            requeteInsert =  "INSERT INTO Notation (id, nom , note) VALUES ("+ id + ', "' + nom_l + '" ,' + note + ")"
+            cursor.execute(requeteInsert)
+            connect.commit()
+            return ("insertion réussi")
 
 api.add_resource(near, '/near/<lat>/<long>')
 api.add_resource(contains, '/contains/<str_w>')
-api.add_resource(note, '/note/<nom_l>')
+api.add_resource(noteMoyenne, '/noteM/<nom_l>')
+api.add_resource(ajouterNote, '/addNote/<nom_l>/<note>/<id>')
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

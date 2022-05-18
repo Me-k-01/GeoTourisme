@@ -26,7 +26,7 @@ export const SideInterface: FC<ISideInterfaceProps> = ({ markers, setMarkers, to
     return (<>
         <aside className={"side-interface" + whenHidden("closed")}>
             <Expand open={showPreview}>
-                {(selIndex !== undefined) && <Preview desc={address[selIndex].desc || "Description test"} img={address[selIndex].image || "https://histoire-a-sac-a-dos.com/wp-content/uploads/2015/03/1JS_1892-1250x834.jpg"} />}
+                {(selIndex !== undefined) && <Preview desc={address[selIndex].desc} img={address[selIndex].image} />}
             </Expand>
 
             <Search onSubmit={(str) => {

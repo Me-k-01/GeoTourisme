@@ -1,3 +1,5 @@
+@use './abstract' as *;
+
 .side-interface {
   width: max(30%, 200px);
   display: flex;
@@ -5,6 +7,31 @@
   flex-direction: column;
   color: rgba(255, 255, 255, 0.8);
   transition: 0.5s;
+
+  nav {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    background-color: rgba(0, 0, 0, 0.5);
+
+    button {
+      width: 200px;
+      text-align: center;
+      border: none;
+      background-color: transparent;
+      color: inherit;
+      padding: 5px;
+      font-size: 1rem;
+
+      &:hover {
+        background-color: rgb(64, 64, 64);
+      } 
+      &:active {
+        background-color: #6c6c6c;
+      }
+    }
+  }
   &.closed {
     width: 0;
     overflow: hidden;
@@ -26,7 +53,6 @@
       flex-grow: 1;
       font-weight: bold;
       color: inherit;
-	//   min-width: 200px;
       background-color: rgba(0, 0, 0, 0.5);
       &::placeholder {
         color: inherit;
@@ -60,12 +86,13 @@
   color: white;
   z-index: 50;
   position: relative;
-  background-color: rgb(37, 37, 37);  
+  background-color: rgb(37, 37, 37);
   border-top-right-radius: 50px;
   border-bottom-right-radius: 50px;
-  width: 35px; height: 50px; 
+  width: 35px;
+  height: 50px;
   font-size: 1.5rem;
-  transition: 0.2s; 
+  transition: 0.2s;
 
   i {
     transition: 0.5s;
@@ -74,4 +101,4 @@
   &:hover {
     background-color: rgb(64, 64, 64);
   }
-} 
+}

@@ -43,7 +43,7 @@
       background-color: rgba(0, 0, 0, 0.1);
     }
     &.selected {
-      background-color: #e94040;
+      background-color: $red;
       box-shadow: $darker-box-shadow;
     }
  

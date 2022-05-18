@@ -21,8 +21,10 @@ export const Scroller: FC<IScrollerProps> = ({ showPreview, list, updateList, on
     return (list.length === 0 ?
         <div>Pas de resultat</div> :
         <ul className="scroller">
-            {list.map((addr, i) =>
-                <li key={i} className={getClass(i)} onClick={() => {
+            {list.map((addr, i) => {
+                console.log(addr.nom, addr.userNote);
+
+                return <li key={i} className={getClass(i)} onClick={() => {
                     onSelect(addr, i);
                 }}>
                     <h3>{addr.nom}</h3>
@@ -32,18 +34,17 @@ export const Scroller: FC<IScrollerProps> = ({ showPreview, list, updateList, on
                     }}>
                         <ReactStars count={5} value={addr.userNote || addr.note}
                             onChange={(n) => {
-                                console.log(list);
                                 addMark(addr.nom, n).then((newNote: number) => {
                                     updateList(list => {
                                         const newList = [...list];
                                         newList[i] = { ...addr, userNote: n, note: newNote };
                                         return newList;
                                     });
-                                    console.log(list);
                                 });
-                        }} size={24} color1={'#ccc'} color2={addr.userNote ? '#00d7ff' : '#ffd700'} />
+                            }} size={24} color1={'#ccc'} color2={addr.userNote ? '#00d7ff' : '#ffd700'} />
                     </div>
                 </li>
+            }
             )}
         </ul>
     );

@@ -39,7 +39,6 @@ export const Scroller: FC<IScrollerProps> = ({ showPreview, list, updateList, on
         <div>Pas de resultat</div> :
         <ul className="scroller">
             {list.map((addr, i) => {
-                addr.userNote ? console.log(addr.userNote) : 0;
                 return <li key={i} className={getClass(i)} onClick={() => {
                     onSelect(addr, i);
                 }}>

@@ -1,9 +1,15 @@
+@use './abstract' as *;
+
 .scroller {
   width: calc(100% - 20px);
   margin: 0;
   padding: 0;
   min-height: auto;
   overflow-y: scroll;
+  border: rgba(0, 0, 0, 0.5) solid 5px;
+  border-radius: 5px;
+  box-shadow: $box-shadow;
+
   .star-wrapper { 
     max-width: 110px; 
   }
@@ -37,7 +43,8 @@
       background-color: rgba(0, 0, 0, 0.1);
     }
     &.selected {
-      background-color: #e94040;
+      background-color: $red;
+      box-shadow: $darker-box-shadow;
     }
  
   }

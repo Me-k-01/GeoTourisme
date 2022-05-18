@@ -37,7 +37,7 @@ export async function showMark(nom: string) {
 //Entrées : nom du lieu + note utilisateur + id utilisateur
 
 export async function addMark(nom: string, note: number) {
-  const uid = localStorage.getItem('uuid');
+  const uid = await getUserId();
   console.log("Ajout à " + nom + " la note " + note + " de la part de " + uid);
 
   try {
@@ -47,5 +47,15 @@ export async function addMark(nom: string, note: number) {
     console.error(err);
   }
 }
-
 //addMark("Cathedrale Sainte-Cecile",4,4);
+
+//fonction récupération de l'user id
+export async function getUserId() {
+    var uid = localStorage.getItem('uuid');
+    if (uid === "string")
+        return +uid;
+    return await axios.get(`/newUser/`).then((uuid) => {
+        localStorage.setItem('uuid', uuid.data);
+        return +uuid.data;
+    });
+};

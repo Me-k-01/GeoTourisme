@@ -58,26 +58,39 @@ class near(Resource):
             lst.append(tmp)
         return jsonify(lst)
 
-class contains(Resource):
+class containsNoId(Resource):
     def get(self,str_w):
+        return contains().get(str_w, None)
+
+class containsNoStr(Resource):
+    def get(self,id):
+        return contains().get(None, id)
+
+class contains(Resource):
+    def get(self,str_w,id):
         #str_w = request.args.get('words')
-        if str_w == None:
-            return []
-        words = str_w.split(" ") #urlparse(str_w).geturl().split(" ") str_w.split(" ")
-        words_search = ""
-        w = len(words)
-        for i in range(w):
-            if i == 0:
-                words_search += "nom LIKE '%" + words[i] + "%' OR adresse LIKE '%" + words[i] + "%'"
-            else:
-                words_search += " OR nom LIKE '%" + words[i]+ "%' OR adresse LIKE '%" + words[i] + "%'"
+        if str_w != None:
+            words = str_w.split(" ") #urlparse(str_w).geturl().split(" ") str_w.split(" ")
+            words_search = ""
+            w = len(words)
+            for i in range(w):
+                if i == 0:
+                    words_search += "nom LIKE '%" + words[i] + "%' OR adresse LIKE '%" + words[i] + "%'"
+                else:
+                    words_search += " OR nom LIKE '%" + words[i]+ "%' OR adresse LIKE '%" + words[i] + "%'"
         connect = mysql.get_db()
         cursor = connect.cursor()
-        requete = """SELECT
+        if str_w == None:
+            requete = """SELECT
                         nom, adresse, latitude, longitude, description, image
                      FROM
-                        Lieux
-                     WHERE """ + words_search
+                        Lieux"""
+        else:
+            requete = """SELECT
+                            nom, adresse, latitude, longitude, description, image
+                         FROM
+                            Lieux
+                         WHERE """ + words_search
         cursor.execute(requete)
         data = cursor.fetchall()
         lst = []
@@ -90,6 +103,17 @@ class contains(Resource):
             tmp.update({'desc': d[4]})
             tmp.update({'image': d[5]})
             tmp.update({'note': getMoyen(d[0])})
+            if id != None :
+                requeteNote = """SELECT
+                                    note
+                                 FROM
+                                    Notation
+                                 WHERE 
+                                    id=\""""+id+ "\" AND nom=\"" + d[0] + "\""
+                cursor.execute(requeteNote)
+                uNote=cursor.fetchall()
+                if uNote :
+                    tmp.update({'userNote': uNote})
             lst.append(tmp)
         return jsonify(lst)
 
@@ -159,7 +183,9 @@ class newUserId(Resource):
         return newId
 
 api.add_resource(near, '/near/<lat>/<long>')
-api.add_resource(contains, '/contains/<str_w>')
+api.add_resource(contains, '/contains/<str_w>/<id>')
+api.add_resource(containsNoId, '/contains/<str_w>')
+api.add_resource(containsNoStr, '/all/<id>')
 api.add_resource(noteMoyenne, '/noteM/<nom_l>')
 api.add_resource(ajouterNote, '/addNote/<nom_l>/<note>/<id>')
 api.add_resource(newUserId, '/newUser/')

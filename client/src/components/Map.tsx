@@ -143,7 +143,7 @@ export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, set
     }
   };
 
-  addMark("Cathedrale Sainte-Cecile",4,4);
+  //addMark("Cathedrale Sainte-Cecile",4,4);
 
   return <MapBox
     initialViewState={{

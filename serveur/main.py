@@ -54,6 +54,7 @@ class near(Resource):
             tmp.update({'long': d[3]})
             tmp.update({'desc': d[4]})
             tmp.update({'image': d[5]})
+            tmp.update({'note': getMoyen(d[0])})
             lst.append(tmp)
         return jsonify(lst)
 
@@ -88,27 +89,34 @@ class contains(Resource):
             tmp.update({'long': d[3]})
             tmp.update({'desc': d[4]})
             tmp.update({'image': d[5]})
+            tmp.update({'note': getMoyen(d[0])})
             lst.append(tmp)
         return jsonify(lst)
 
+def getMoyen(nom_l) : 
+    #str_w = request.args.get('words')
+    if nom_l == None:
+        return 0
+    connect = mysql.get_db()
+    cursor = connect.cursor()
+    requete = """SELECT
+                    note
+                    FROM
+                    Notation
+                    WHERE nom=""" + '"' + nom_l + '"'
+    cursor.execute(requete)
+    data = cursor.fetchall()
+    if len(data) == 0 :
+        return 0
+    moy = 0
+    for d in data:
+        moy=moy+int(d[0])
+ 
+    return (moy/len(data))
+
 class noteMoyenne(Resource):
-    def get(self,nom_l):
-        #str_w = request.args.get('words')
-        if nom_l == None:
-            return []
-        connect = mysql.get_db()
-        cursor = connect.cursor()
-        requete = """SELECT
-                        note
-                     FROM
-                        Notation
-                     WHERE nom=""" + '"' + nom_l + '"'
-        cursor.execute(requete)
-        data = cursor.fetchall()
-        moy = 0
-        for d in data:
-            moy=moy+int(d[0])
-        return (moy/len(data))
+    def get(self,nom_l): 
+        return getMoyen(nom_l)
 
 class ajouterNote(Resource):
     def post(self,nom_l,note,id):

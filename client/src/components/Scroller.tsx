@@ -1,13 +1,17 @@
-import { FC, useEffect } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
+import { Address } from "../address";
 import axios from 'axios';
 import { Address } from "../Address";
 import ReactStars from 'react-stars';
+import { addMark } from '../connection';
+
 
 export interface IScrollerProps {
     list: Address[];
     onSelect: (address: Address, index: number) => void;
     selectedIndex: number | undefined;
     showPreview: boolean;
+    updateList: Dispatch<SetStateAction<Address[]>>;
 };
 
 //fonction récupération de l'user id
@@ -54,9 +58,7 @@ function addMark(nom: string, note: number, id: number) {
     }
 };
 
-  //addMark("Cathedrale Sainte-Cecile",4,4);
-
-export const Scroller: FC<IScrollerProps> = ({ showPreview, list, onSelect, selectedIndex }) => {
+export const Scroller: FC<IScrollerProps> = ({ showPreview, list, updateList, onSelect, selectedIndex }) => {
 
     const getClass = (i: number) => {
         return showPreview && selectedIndex === i ? "selected" : "";
@@ -65,22 +67,25 @@ export const Scroller: FC<IScrollerProps> = ({ showPreview, list, onSelect, sele
     return (list.length === 0 ?
         <div>Pas de resultat</div> :
         <ul className="scroller">
-            {list.map((address, i) =>
+            {list.map((addr, i) =>
                 <li key={i} className={getClass(i)} onClick={() => {
                     onSelect(address, i);
                 }}>
-                    <h3>{address.nom}</h3>
-                    <p>{address.adresse}</p>
+                    <h3>{addr.nom}</h3>
+                    <p>{addr.adresse}</p>
                     <div className="star-wrapper" onClick={(evt) => {
                         evt.stopPropagation();
                     }}>
-                        <ReactStars count={5} onChange={(n) => {
+                        <ReactStars count={5} value={addr.userNote || addr.note} onChange={async (n) => {
                             getUserId().then((uid) => {
-                                addMark(address.nom, n, uid);
+                                const newNote = await addMark(addr.nom, n, uid);
+                                updateList(list => {
+                                    const newList = [...list];
+                                    newList[i] = { ...addr, userNote: n, note: newNote };
+                                    return newList;
+                                });
                             });
-                            console.log(n);
-                            console.log(localStorage.getItem("mapbox.eventData.uuid:"));
-                        }} size={24} color2={'#ffd700'} />
+                        }} size={24} color1={'#ccc'} color2={addr.userNote ? '#00d7ff' : '#ffd700'} />
                     </div>
                 </li>
             )}

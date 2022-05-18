@@ -2,7 +2,7 @@ import { FC, useState, Dispatch, SetStateAction } from "react";
 import { Search } from "./Search"
 import axios from 'axios';
 import { Scroller } from "./Scroller";
-import { Address } from "../Address";
+import { Address } from "../address";
 import { Location } from "./Map"
 import { Preview } from "./Preview";
 import Expand from 'react-expand-animated';
@@ -22,7 +22,6 @@ export const SideInterface: FC<ISideInterfaceProps> = ({ markers, setMarkers, to
 
     const whenHidden = (className: string) => showMenu ? "" : "  " + className;
 
-
     return (<>
         <aside className={"side-interface" + whenHidden("closed")}>
             <Expand open={showPreview}>
@@ -30,20 +29,15 @@ export const SideInterface: FC<ISideInterfaceProps> = ({ markers, setMarkers, to
             </Expand>
 
             <Search onSubmit={(str) => {
-                setHideResult(false); 
-                try {
-                    if (str === "")
-                        setAddress([]);
-                    else
-                        axios.get(`/contains/${str}`).then((resp: any) => {
-                            setAddress(resp.data);
-                        });
-                } catch (err) {
-                    console.log(err);
-                }
+                setHideResult(false);
+                if (str === "")
+                    setAddress([]);
+                else
+                    axios.get(`/contains/${str}`)
+                        .then(resp => setAddress(resp.data));
             }} />
-            {!hideResult && <Scroller showPreview={showPreview} selectedIndex={selIndex} list={address} onSelect={(adress: Address, i: number) => {
-                // S'il y a trop de marqueur
+            {!hideResult && <Scroller showPreview={showPreview} updateList={setAddress} selectedIndex={selIndex} list={address} onSelect={(adress: Address, i: number) => {
+                // S'il y a trop de marqueur (limite à 12)
                 if (totalMarker > 11)
                     return alert(`Votre parcours comporte trop de lieux.\nLimitez vos choix pour en profiter.`);
 

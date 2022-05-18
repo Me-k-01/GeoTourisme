@@ -13,22 +13,22 @@
     padding: 1rem 1rem;
     border-radius: 5px;
     transition: 0.2s;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2); 
 
     &:nth-of-type(even) {
       background-color: rgba(255, 255, 255, 0.05);
     }
     &:last-of-type {
       border: none;
-    }
+    } 
     h3 {
       padding: 0;
-      margin: 0;
+      margin: 0; 
       text-align: left;
     }
     p {
       padding: 0;
-      margin: 0;
+      margin: 0;flex-grow: 1;
     }
     &:hover {
       background-color: rgba(0, 0, 0, 0.1);
@@ -36,5 +36,7 @@
     &.selected {
       background-color: #e94040;
     }
+ 
   }
+  
 }

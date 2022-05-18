@@ -29,6 +29,7 @@ export const Scroller: FC<IScrollerProps> = ({ showPreview, list, onSelect, sele
                     }}>
                         <ReactStars count={5} onChange={(n) => {
                             console.log(n);
+                            console.log(localStorage.getItem("mapbox.eventData.uuid:"));
                         }} size={24} color2={'#ffd700'} />
                     </div>
                 </li>

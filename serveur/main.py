@@ -33,7 +33,7 @@ class near(Resource):
         connect = mysql.get_db()
         cursor = connect.cursor()
         requete = """SELECT
-                        nom, adresse, latitude, longitude
+                        nom, adresse, latitude, longitude, description, image
                      FROM
                         Lieux
                      NATURAL JOIN
@@ -51,6 +51,8 @@ class near(Resource):
             tmp.update({'adresse': d[1]})
             tmp.update({'lat': d[2]})
             tmp.update({'long': d[3]})
+            tmp.update({'desc': d[4]})
+            tmp.update({'image': d[5]})
             lst.append(tmp)
         return jsonify(lst)
 
@@ -76,7 +78,7 @@ class contains(Resource):
         connect = mysql.get_db()
         cursor = connect.cursor()
         requete = """SELECT
-                        nom, adresse, latitude, longitude
+                        nom, adresse, latitude, longitude, description, image
                      FROM
                         Lieux
                      WHERE """ + words_search
@@ -89,6 +91,8 @@ class contains(Resource):
             tmp.update({'adresse': d[1]})
             tmp.update({'lat': d[2]})
             tmp.update({'long': d[3]})
+            tmp.update({'desc': d[4]})
+            tmp.update({'image': d[5]})
             lst.append(tmp)
         return jsonify(lst)
 

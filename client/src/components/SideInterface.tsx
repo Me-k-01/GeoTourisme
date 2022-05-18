@@ -30,17 +30,12 @@ export const SideInterface: FC<ISideInterfaceProps> = ({ markers, setMarkers, to
             </Expand>
 
             <Search onSubmit={(str) => {
-                setHideResult(false); 
-                try {
-                    if (str === "")
-                        setAddress([]);
-                    else
-                        axios.get(`/contains/${str}`).then((resp: any) => {
-                            setAddress(resp.data);
-                        });
-                } catch (err) {
-                    console.log(err);
-                }
+                setHideResult(false);
+                if (str === "")
+                    setAddress([]);
+                else
+                    axios.get(`/contains/${str}`)
+                        .then(resp => setAddress(resp.data));
             }} />
             {!hideResult && <Scroller showPreview={showPreview} selectedIndex={selIndex} list={address} onSelect={(adress: Address, i: number) => {
                 // S'il y a trop de marqueur

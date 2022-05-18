@@ -1,7 +1,8 @@
 import { FC } from "react";
 import { Address } from "../Address";
 import ReactStars from 'react-stars';
-
+import axios from 'axios';
+ 
 export interface IScrollerProps {
     list: Address[];
     onSelect: (address: Address, index: number) => void;
@@ -27,10 +28,14 @@ export const Scroller: FC<IScrollerProps> = ({ showPreview, list, onSelect, sele
                     <div className="star-wrapper" onClick={(evt) => {
                         evt.stopPropagation();
                     }}>
-                        <ReactStars count={5} onChange={(n) => {
-                            console.log(n);
-                            console.log(localStorage.getItem("mapbox.eventData.uuid:"));
-                        }} size={24} color2={'#ffd700'} />
+                        <ReactStars count={5} value={address.note || Math.trunc(Math.random() * 5) + 1} onChange={(n) => {
+                            console.log("Note ajouté:", n);
+                            const uuid = localStorage.getItem("mapbox.eventData.uuid:")
+                            console.log(uuid);
+                            
+                            // TODO
+                            // axios.post(`/addNote/<nom_l>/<note>/<id>`);
+                        }} size={24} color1={'#ccc'} color2={'#ffd700'} />
                     </div>
                 </li>
             )}

@@ -4,6 +4,9 @@
   padding: 0;
   min-height: auto;
   overflow-y: scroll;
+  .star-wrapper { 
+    max-width: 110px; 
+  }
   &::-webkit-scrollbar {
     border-radius: 8px;
   }

@@ -1,12 +1,23 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Map, Location } from "./Map";
+import axios from 'axios';
 import {SideInterface} from "./SideInterface";
 
 function App() {
   const [markers, setMarkers] = useState<Location[]>([]);
   const [markersSecondaires, setMarkersSecondaires] = useState<Location[]>([]);
   const totalMarker = markers.length + markersSecondaires.length + 1;
- 
+  
+  useEffect(() => {
+    // Retreive user id
+    axios.get(`/newUser/`).then((uuid) => {
+      if (typeof uuid !== "string") {
+        throw 'Parameter is not a string!';
+      }
+      localStorage.setItem('uuid', uuid);
+    }) 
+    
+  }, [])
 
   return (
     <>

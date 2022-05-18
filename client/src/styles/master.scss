@@ -31,16 +31,3 @@ input {
 .rotate {
   transform: rotate(180deg);
 }
-
-.expand {
-  max-height: 100vh;
-  margin: 0;
-  padding: 0;
-  width: 100%;
-  transition: 1s;
-
-  &.closed {
-    max-height: 0;
-    overflow: hidden;
-  }
-} 

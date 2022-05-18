@@ -5,7 +5,7 @@ import { Scroller } from "./Scroller";
 import { Address } from "../Address";
 import { Location } from "./Map"
 import { Preview } from "./Preview";
-import { Expand } from "./Expand";
+import Expand from 'react-expand-animated';
 
 interface ISideInterfaceProps {
     markers: Location[];
@@ -14,33 +14,35 @@ interface ISideInterfaceProps {
 };
 
 export const SideInterface: FC<ISideInterfaceProps> = ({ markers, setMarkers, totalMarker }) => {
-    const [searchResult, setSearchResult] = useState<Address[]>([]);
+    const [address, setAddress] = useState<Address[]>([]);
     const [showMenu, setShowMenu] = useState(true);
     const [hideResult, setHideResult] = useState(true);
+    const [selIndex, setSelIndex] = useState<number>();
+    const [showPreview, setShowPreview] = useState(false);
+
     const whenHidden = (className: string) => showMenu ? "" : "  " + className;
-    const [selected, setSelected] = useState<Address>();
+
 
     return (<>
         <aside className={"side-interface" + whenHidden("closed")}>
-            <Expand isOpen={selected !== undefined}>
-                {selected && <Preview desc={selected.desc || "Description test"} img={selected.image || "https://histoire-a-sac-a-dos.com/wp-content/uploads/2015/03/1JS_1892-1250x834.jpg"} />}
+            <Expand open={showPreview}>
+                {(selIndex !== undefined) && <Preview desc={address[selIndex].desc} img={address[selIndex].image} />}
             </Expand>
 
             <Search onSubmit={(str) => {
-                setHideResult(false);
-
+                setHideResult(false); 
                 try {
                     if (str === "")
-                        setSearchResult([]);
+                        setAddress([]);
                     else
                         axios.get(`/contains/${str}`).then((resp: any) => {
-                            setSearchResult(resp.data);
+                            setAddress(resp.data);
                         });
                 } catch (err) {
                     console.log(err);
                 }
             }} />
-            {!hideResult && <Scroller list={searchResult} onSelect={(adress: Address) => {
+            {!hideResult && <Scroller showPreview={showPreview} selectedIndex={selIndex} list={address} onSelect={(adress: Address, i: number) => {
                 // S'il y a trop de marqueur
                 if (totalMarker > 11)
                     return alert(`Votre parcours comporte trop de lieux.\nLimitez vos choix pour en profiter.`);
@@ -53,10 +55,12 @@ export const SideInterface: FC<ISideInterfaceProps> = ({ markers, setMarkers, to
                     // On ajoute le nouveau marqueur
                     setMarkers(markers => [...markers, adress]);
                     // Et on selectionne pour une preview
-                    setSelected(adress);
+                    setSelIndex(i);
+                    setShowPreview(true);
+
                 } else { // Retirer le marqueur
                     setMarkers(markers.filter(loc => !isEqual(loc)));
-                    setSelected(undefined);
+                    setShowPreview(false);
                 }
             }} />}
         </aside>

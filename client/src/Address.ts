@@ -4,7 +4,7 @@ export interface Address {
     adresse: string;
     lat: number;
     long: number; 
-    desc?: string;
-    image?: string;
+    desc: string;
+    image: string;
 }
 

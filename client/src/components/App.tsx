@@ -14,13 +14,13 @@ function App() {
   });
 
   useEffect(() => {
-    if (!localStorage.getItem('uuid')) // Générer un nouveau user id
+    if (!localStorage.getItem('uuid')) // Générer un nouveau user id 
       axios.get(`/newUser/`).then(uuid => {
         if (typeof uuid !== "string") {
           throw 'Parameter is not a string!';
         }
         localStorage.setItem('uuid', uuid);
-      });
+      }); 
     ///////// Géolocalisation /////////
     if (!navigator.geolocation)
       console.error("Géolocalisation non supportée");

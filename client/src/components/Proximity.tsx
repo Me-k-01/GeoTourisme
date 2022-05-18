@@ -24,16 +24,17 @@ export const Proximity: FC<IProximityProps> = ({ pos, markers, setMarkers, total
     useEffect(() => {
         setInterval(() => {
             // Fetch des lieu a proximité
-            nearby(pos.lat, pos.long).then((d) => {
-                setAddress(d);
+            nearby(pos.lat, pos.long).then((address) => {
+                setAddress(address);
                 setIsLoading(false);
+                // setMarkers(address as Location[])
             });
         }, 5000);
     }, [])
 
     return (
         <>
-            <h2>Lieu a proximité</h2>
+            {!showPreview && <h2>Lieu a proximité</h2>}
             <Expand open={showPreview}>
                 {(selIndex !== undefined) && <Preview desc={address[selIndex].desc} img={address[selIndex].image} />}
             </Expand>

@@ -20,7 +20,7 @@ app.config['MYSQL_DATABASE_DB'] = bdd.database
 mysql.init_app(app)
 
 class near(Resource):
-    def get(self,lat,long):
+    def get(self,lat,long, id):
 
         print("latitude : " + lat)
 
@@ -53,6 +53,17 @@ class near(Resource):
             tmp.update({'desc': d[4]})
             tmp.update({'image': d[5]})
             tmp.update({'note': getMoyen(d[0])})
+            if id != None :
+                requeteNote = """SELECT
+                                    note
+                                 FROM
+                                    Notation
+                                 WHERE 
+                                    id=\""""+id+ "\" AND nom=\"" + d[0] + "\""
+                cursor.execute(requeteNote)
+                uNote=cursor.fetchall()
+                if uNote :
+                    tmp.update({'userNote': uNote[0][0]})
             lst.append(tmp)
         return jsonify(lst)
 
@@ -239,7 +250,8 @@ class visites(Resource):
             lst.append(tmp)
         return jsonify(lst)
 
-api.add_resource(near, '/near/<lat>/<long>')
+api.add_resource(near, '/near/<lat>/<long>/<id>')
+# api.add_resource(near, '/near/<lat>/<long>')
 api.add_resource(contains, '/contains/<str_w>/<id>')
 api.add_resource(containsNoId, '/contains/<str_w>')
 api.add_resource(containsNoStr, '/all/<id>')

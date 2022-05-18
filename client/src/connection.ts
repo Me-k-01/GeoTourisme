@@ -1,17 +1,15 @@
 import axios from "axios";
 
+const uuid = localStorage.getItem("uuid");
+
 export async function search(searchStr: string) {
-  return (await axios.get(`/contains/${searchStr}/${await getUserId()}`)).data;
+  return (await axios.get(`/contains/${searchStr}/${uuid}`)).data;
 }
 
 //Toutes les 5s on va regarder ce qu'il y a autour
 export async function nearby(latbis: number, longbis: number) {
   // console.log("exploration de lat : " + latbis + " long : " + longbis);
-  try {
-    return (await axios.get(`/near/${latbis}/${longbis}`)).data; 
-  } catch (err) {
-    console.error(err);
-  }
+  return (await axios.get(`/near/${latbis}/${longbis}/${uuid}`)).data;
 
   //setTimeout(nearby,10000);
 }
@@ -23,11 +21,7 @@ export async function nearby(latbis: number, longbis: number) {
 
 export async function showMark(nom: string) {
   // console.log("Quel est la moyenne de " + nom + " ?");
-  try {
-    return (await axios.get(`/noteM/${nom}`)).data;
-  } catch (err) {
-    console.error(err);
-  }
+  return (await axios.get(`/noteM/${nom}`)).data;
 }
 
 //showMark("Cathedrale Sainte-Cecile");
@@ -36,25 +30,9 @@ export async function showMark(nom: string) {
 //Entrées : nom du lieu + note utilisateur + id utilisateur
 
 export async function addMark(nom: string, note: number) {
-  const uid = await getUserId();
-  console.log("Ajout à " + nom + " la note " + note + " de la part de " + uid);
+  console.log("Ajout à " + nom + " la note " + note + " de la part de " + uuid);
 
-  try {
-    axios.post(`/addNote/${nom}/${note}/${uid}`);
-    return (await axios.get(`/noteM/${nom}`)).data // Retourne la nouvelle moyenne
-  } catch (err) {
-    console.error(err);
-  }
+  axios.post(`/addNote/${nom}/${note}/${uuid}`);
+  return (await axios.get(`/noteM/${nom}`)).data; // Retourne la nouvelle moyenne
 }
 //addMark("Cathedrale Sainte-Cecile",4,4);
-
-//fonction récupération de l'user id
-export async function getUserId() {
-    var uid = localStorage.getItem('uuid');
-    if (uid)
-        return +uid;
-    return await axios.get(`/newUser/`).then((uuid) => {
-        localStorage.setItem('uuid', uuid.data);
-        return +uuid.data;
-    });
-};

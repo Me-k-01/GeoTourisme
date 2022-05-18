@@ -1,7 +1,8 @@
-import { Dispatch, FC, SetStateAction } from "react";
+import React, { Dispatch, FC, SetStateAction } from "react";
 import { Address } from "../address";
 import ReactStars from 'react-stars';
 import { addMark } from '../connection';
+import { setConstantValue } from "typescript";
 
 
 export interface IScrollerProps {
@@ -14,6 +15,22 @@ export interface IScrollerProps {
 
 export const Scroller: FC<IScrollerProps> = ({ showPreview, list, updateList, onSelect, selectedIndex }) => {
 
+    function stars(addr: Address, i: number, color: string) {
+        return <ReactStars count={5} value={addr.userNote || addr.note}
+
+            onChange={(n) => {
+                addMark(addr.nom, n).then((newNote: number) => {
+                    n = newNote;
+                    updateList(list => {
+                        const newList = [...list];
+                        newList[i] = { ...addr, userNote: n, note: newNote };
+                        return newList;
+                    });
+                });
+            }}
+            size={24} color1={'#ccc'} color2={color} />;
+    }
+
     const getClass = (i: number) => {
         return showPreview && selectedIndex === i ? "selected" : "";
     }
@@ -21,8 +38,9 @@ export const Scroller: FC<IScrollerProps> = ({ showPreview, list, updateList, on
     return (list.length === 0 ?
         <div>Pas de resultat</div> :
         <ul className="scroller">
-            {list.map((addr, i) =>
-                <li key={i} className={getClass(i)} onClick={() => {
+            {list.map((addr, i) => {
+                addr.userNote ? console.log(addr.userNote) : 0;
+                return <li key={i} className={getClass(i)} onClick={() => {
                     onSelect(addr, i);
                 }}>
                     <h3>{addr.nom}</h3>
@@ -30,20 +48,11 @@ export const Scroller: FC<IScrollerProps> = ({ showPreview, list, updateList, on
                     <div className="star-wrapper" onClick={(evt) => {
                         evt.stopPropagation();
                     }}>
-                        <ReactStars count={5} value={addr.userNote || addr.note}
-                            onChange={(n) => {
-                                console.log(list);
-                                addMark(addr.nom, n).then((newNote: number) => {
-                                    updateList(list => {
-                                        const newList = [...list];
-                                        newList[i] = { ...addr, userNote: n, note: newNote };
-                                        return newList;
-                                    });
-                                    console.log(list);
-                                });
-                        }} size={24} color1={'#ccc'} color2={addr.userNote ? '#00d7ff' : '#ffd700'} />
+                        {addr.userNote && stars(addr, i, '#00d7ff')}
+                        {!addr.userNote && stars(addr, i, '#ffd700')}
                     </div>
                 </li>
+            }
             )}
         </ul>
     );

@@ -5,6 +5,7 @@ import { Scroller } from "./Scroller";
 import { Address } from "../address";
 import { Location } from "./Map"
 import { Preview } from "./Preview";
+import { getUserId } from '../connection';
 import Expand from 'react-expand-animated';
 
 interface ISideInterfaceProps {
@@ -28,12 +29,12 @@ export const SideInterface: FC<ISideInterfaceProps> = ({ markers, setMarkers, to
                 {(selIndex !== undefined) && <Preview desc={address[selIndex].desc!} img={address[selIndex].image!} />}
             </Expand>
 
-            <Search onSubmit={(str) => {
+            <Search onSubmit={async (str) => {
                 setHideResult(false);
                 if (str === "")
                     setAddress([]);
                 else
-                    axios.get(`/contains/${str}`)
+                    axios.get(`/contains/${str}/${await getUserId()}`)
                         .then(resp => setAddress(resp.data));
             }} />
             {!hideResult && <Scroller showPreview={showPreview} updateList={setAddress} selectedIndex={selIndex} list={address} onSelect={(adress: Address, i: number) => {

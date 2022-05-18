@@ -113,7 +113,7 @@ class contains(Resource):
                 cursor.execute(requeteNote)
                 uNote=cursor.fetchall()
                 if uNote :
-                    tmp.update({'userNote': uNote})
+                    tmp.update({'userNote': uNote[0][0]})
             lst.append(tmp)
         return jsonify(lst)
 

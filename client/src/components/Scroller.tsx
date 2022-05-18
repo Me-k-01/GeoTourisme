@@ -1,7 +1,7 @@
 import { Dispatch, FC, SetStateAction } from "react";
 import { Address } from "../address";
 import ReactStars from 'react-stars';
-import { addMark, getUserId } from '../connection';
+import { addMark } from '../connection';
 
 
 export interface IScrollerProps {
@@ -30,13 +30,17 @@ export const Scroller: FC<IScrollerProps> = ({ showPreview, list, updateList, on
                     <div className="star-wrapper" onClick={(evt) => {
                         evt.stopPropagation();
                     }}>
-                        <ReactStars count={5} value={addr.userNote || addr.note} onChange={async (n) => {
-                            const newNote = await addMark(addr.nom, n);
-                            updateList(list => {
-                                const newList = [...list];
-                                newList[i] = { ...addr, userNote: n, note: newNote };
-                                return newList;
-                            });
+                        <ReactStars count={5} value={addr.userNote || addr.note}
+                            onChange={(n) => {
+                                console.log(list);
+                                addMark(addr.nom, n).then((newNote: number) => {
+                                    updateList(list => {
+                                        const newList = [...list];
+                                        newList[i] = { ...addr, userNote: n, note: newNote };
+                                        return newList;
+                                    });
+                                    console.log(list);
+                                });
                         }} size={24} color1={'#ccc'} color2={addr.userNote ? '#00d7ff' : '#ffd700'} />
                     </div>
                 </li>

@@ -52,7 +52,7 @@ export async function addMark(nom: string, note: number) {
 //fonction récupération de l'user id
 export async function getUserId() {
     var uid = localStorage.getItem('uuid');
-    if (uid === "string")
+    if (uid)
         return +uid;
     return await axios.get(`/newUser/`).then((uuid) => {
         localStorage.setItem('uuid', uuid.data);

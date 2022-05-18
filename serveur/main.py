@@ -6,7 +6,6 @@ from flaskext.mysql import MySQL
 from urllib.parse import urlparse
 from datetime import date, datetime
 
-from requests import delete
 import bdd
 
 app = Flask(__name__)
@@ -133,9 +132,28 @@ class ajouterNote(Resource):
             connect.commit()
             return ("insertion réussi")
 
+class newUserId(Resource):
+    def get(self):
+        connect = mysql.get_db()
+        cursor = connect.cursor()
+        requete = """SELECT
+                        id
+                     FROM
+                        Users"""
+        cursor.execute(requete)
+        data = cursor.fetchall()
+        newId = len(data) + 1
+        requeteNewUser = """INSERT INTO
+                                Users (id)
+                            VALUES (""" + str(newId) + ")"
+        cursor.execute(requeteNewUser)
+        connect.commit()
+        return newId
+
 api.add_resource(near, '/near/<lat>/<long>')
 api.add_resource(contains, '/contains/<str_w>')
 api.add_resource(noteMoyenne, '/noteM/<nom_l>')
 api.add_resource(ajouterNote, '/addNote/<nom_l>/<note>/<id>')
+api.add_resource(newUserId, '/newUser/')
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

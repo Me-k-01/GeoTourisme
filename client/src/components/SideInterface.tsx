@@ -22,7 +22,6 @@ export const SideInterface: FC<ISideInterfaceProps> = ({ markers, setMarkers, to
 
     const whenHidden = (className: string) => showMenu ? "" : "  " + className;
 
-
     return (<>
         <aside className={"side-interface" + whenHidden("closed")}>
             <Expand open={showPreview}>
@@ -38,7 +37,7 @@ export const SideInterface: FC<ISideInterfaceProps> = ({ markers, setMarkers, to
                         .then(resp => setAddress(resp.data));
             }} />
             {!hideResult && <Scroller showPreview={showPreview} selectedIndex={selIndex} list={address} onSelect={(adress: Address, i: number) => {
-                // S'il y a trop de marqueur
+                // S'il y a trop de marqueur (limite à 12)
                 if (totalMarker > 11)
                     return alert(`Votre parcours comporte trop de lieux.\nLimitez vos choix pour en profiter.`);
 

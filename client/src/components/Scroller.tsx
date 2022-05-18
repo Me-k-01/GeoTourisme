@@ -6,15 +6,14 @@ import axios from 'axios';
 interface IDisplayAddressProps {
     address: Address;
     className: string;
-    onClick: MouseEventHandler<HTMLLIElement>;
-    key: number;
+    onClick: MouseEventHandler<HTMLLIElement>; 
 };
 
-export const DisplayAddress: FC<IDisplayAddressProps> = ({ key, className, address, onClick }) => {
+export const DisplayAddress: FC<IDisplayAddressProps> = ({  className, address, onClick }) => {
     // const [userNote, setUserNote] = useState(address.userNote);
 
     return (
-        <li key={key} className={className} onClick={onClick}>
+        <li className={className} onClick={onClick}>
             <h3>{address.nom}</h3>
             <p>{address.adresse}</p>
             <div className="star-wrapper" onClick={(evt) => {
@@ -22,7 +21,7 @@ export const DisplayAddress: FC<IDisplayAddressProps> = ({ key, className, addre
             }}>
                 <ReactStars count={5} value={address.userNote || Math.trunc(Math.random() * 5) + 1} onChange={(n) => {
                     console.log("Note ajouté:", n);
-                    const uuid = localStorage.getItem('uuid'); 
+                    const uuid = localStorage.getItem('uuid');
                     axios.post(`/addNote/${address.nom}/${n}/${uuid}`);
                     // setUserNote(n);
                 }} size={24} color1={'#ccc'} color2={'#ffd700'} />
@@ -48,11 +47,10 @@ export const Scroller: FC<IScrollerProps> = ({ showPreview, list, onSelect, sele
     return (list.length === 0 ?
         <div>Pas de resultat</div> :
         <ul className="scroller">
-            {list.map((address, i) => {
+            {list.map((address, i) =>
                 <DisplayAddress key={i} className={getClass(i)} address={address} onClick={() => {
                     onSelect(address, i);
                 }} />
-            }
             )}
         </ul>
     );

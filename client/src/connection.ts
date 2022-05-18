@@ -1,16 +1,16 @@
 import axios from "axios";
 
+export async function search(searchStr: string) {
+  return (await axios.get(`/contains/${searchStr}/${await getUserId()}`)).data;
+}
 
 //Toutes les 5s on va regarder ce qu'il y a autour
-export function nearby(latbis: number, longbis: number) {
-  console.log("exploration de lat : " + latbis + " long : " + longbis);
-
+export async function nearby(latbis: number, longbis: number) {
+  // console.log("exploration de lat : " + latbis + " long : " + longbis);
   try {
-    axios.get(`/near/${latbis}/${longbis}`).then((resp: any) => {
-      console.log(resp);
-    });
+    return (await axios.get(`/near/${latbis}/${longbis}`)).data; 
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 
   //setTimeout(nearby,10000);
@@ -22,12 +22,11 @@ export function nearby(latbis: number, longbis: number) {
 //Entrée : nom du lieu ; Sortie : note moyenne du lieux
 
 export async function showMark(nom: string) {
-  console.log("Quel est la moyenne de " + nom + " ?");
-
+  // console.log("Quel est la moyenne de " + nom + " ?");
   try {
     return (await axios.get(`/noteM/${nom}`)).data;
   } catch (err) {
-    console.log(err);
+    console.error(err);
   }
 }
 

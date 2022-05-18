@@ -4,8 +4,9 @@ interface ISearchProps {
     onSubmit: (input: string) => void;
 }
 
+let input = "";
+
 export const Search: FC<ISearchProps> = ({ onSubmit }) => {
-    let input = "";
 
     return (
         <form action="/" method="get">

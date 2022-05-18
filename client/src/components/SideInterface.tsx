@@ -5,6 +5,7 @@ import { Scroller } from "./Scroller";
 import { Adress } from "../Adress";
 import { Location } from "./Map"
 import { Preview } from "./Preview";
+import { Expand } from "./Expand";
 
 interface ISideInterfaceProps {
     markers: Location[];
@@ -18,12 +19,13 @@ export const SideInterface: FC<ISideInterfaceProps> = ({ markers, setMarkers, to
     const [hideResult, setHideResult] = useState(true);
     const whenHidden = (className: string) => showMenu ? "" : "  " + className;
     const [selected, setSelected] = useState<Adress>();
-    
+
     return (
         <>
             <aside className={"side-interface" + whenHidden("closed")}>
-                <Preview isOpen={selected !== undefined} desc={selected?.desc || "Description test"} img={selected?.image || "https://histoire-a-sac-a-dos.com/wp-content/uploads/2015/03/1JS_1892-1250x834.jpg"} />
-                
+                <Expand isOpen={selected !== undefined}>
+                    {selected && <Preview desc={selected.desc || "Description test"} img={selected.image || "https://histoire-a-sac-a-dos.com/wp-content/uploads/2015/03/1JS_1892-1250x834.jpg"} />}
+                </Expand>
 
                 <Search onSubmit={(str) => {
                     setHideResult(false);
@@ -48,7 +50,7 @@ export const SideInterface: FC<ISideInterfaceProps> = ({ markers, setMarkers, to
                     const isEqual = ({ long, lat }: Location) => long === adress.long && lat === adress.lat;
 
                     // Si le marqueur n'a pas déjà été créé  
-                    if (!markers.find(isEqual)) { 
+                    if (!markers.find(isEqual)) {
                         // On ajoute le nouveau marqueur
                         setMarkers(markers => [...markers, adress]);
                         // Et on selectionne pour une preview

@@ -1,18 +1,17 @@
-import { FC } from "react";
+import { FC } from "react"; 
 interface IPreviewProps {
     img: string;
-    desc: string;
-    isOpen: boolean;
+    desc: string; 
 };
 
-export const Preview: FC<IPreviewProps> = ({img, desc, isOpen}) => {
-    return (
-        <div className={"preview" + (isOpen? "" : " closed")} >
-            
-            <img src={img} alt="" /> 
-            <p>
-                {desc}
-            </p>
-        </div>
+export const Preview: FC<IPreviewProps> = ({ img, desc }) => {
+    return ( 
+
+            <div className="preview">
+                <img src={img} alt="" />
+                <p>
+                    {desc}
+                </p>
+            </div> 
     );
 }

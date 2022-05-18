@@ -1,13 +1,14 @@
 body {
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
+    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background: rgb(37, 37, 37);
-  
-} 
-html, body, #root {
+}
+html,
+body,
+#root {
   margin: 0;
   padding: 0;
   width: 100%;
@@ -16,7 +17,7 @@ html, body, #root {
 #root {
   display: flex;
 }
- 
+
 li {
   list-style: none;
 }
@@ -31,11 +32,15 @@ input {
   transform: rotate(180deg);
 }
 
-// .expander {
-//   max-height: 100vh;
+.expand {
+  max-height: 100vh;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  transition: .5s;
 
-//   .close {
-//     max-height: 0;
-//     overflow: hidden;
-//   }
-// }
+  &.closed {
+    max-height: 0;
+    overflow: hidden;
+  }
+} 

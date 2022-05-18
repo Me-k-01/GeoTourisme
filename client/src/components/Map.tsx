@@ -1,6 +1,5 @@
-import * as turf from "@turf/turf"
-import axios from 'axios';
-import { FC, useEffect, useState } from "react"
+import * as turf from "@turf/turf";
+import { FC, useEffect, useState } from "react";
 import { Map as MapBox, Layer, Marker, Source } from 'react-map-gl';
 
 export type Location = {
@@ -55,7 +54,7 @@ export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, set
       }, 5000);
     ///////////////////////////////
   }, []);
- 
+
   const removeMarker = (markers: Location[], marker: Location) =>
     markers.filter(({ long, lat }) =>
       marker.long !== long || marker.lat !== lat
@@ -92,59 +91,6 @@ export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, set
     createPath();
   }, [markers, markersSecondaires, pos]); // S'il y a un changement de marqueurs ou de position on update le chemin 
 
-  //Toutes les 5s on va regarder ce qu'il y a autour
-  function nearby(latbis : number,longbis : number){
-    console.log("exploration de lat : " + latbis + " long : " + longbis);
-
-    try {
-      axios.get(`/near/${latbis}/${longbis}`).then((resp: any) => {
-        console.log(resp)
-      });
-    } catch (err) {
-      console.log(err);
-    }
-
-    //setTimeout(nearby,10000);
-  };
-
-  //nearby(lat,long);
-
-  //fonction récupération de la note
-  //Entrée : nom du lieu ; Sortie : note moyenne du lieux
-
-  function showMark(nom : string){
-    console.log("Quel est la moyenne de " + nom + " ?");
-
-    try {
-      axios.get(`/noteM/${nom}`).then((resp: any) => {
-        console.log(resp.data)
-        return(resp)
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  //showMark("Cathedrale Sainte-Cecile");
-
-  //fonction ajouter une note
-  //Entrées : nom du lieu + note utilisateur + id utilisateur
-
-  function addMark(nom : string, note : number , id : number){
-    console.log("ajout à " + nom + " la note " + note + " de la part de " + id);
-
-    try {
-      axios.post(`/addNote/${nom}/${note}/${id}`).then((resp: any) => {
-        console.log(resp.data)
-        return(resp)
-      });
-    } catch (err) {
-      console.log(err);
-    }
-  };
-
-  //addMark("Cathedrale Sainte-Cecile",4,4);
-
   return <MapBox
     initialViewState={{
       longitude: pos.long,
@@ -155,12 +101,12 @@ export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, set
     mapboxAccessToken={process.env.REACT_APP_MAPBOX_TOKEN!} // Accès du token dans le fichier .en.local
     mapStyle="mapbox://styles/mapbox/streets-v11"
     onClick={(evt) => {
-      evt.preventDefault(); 
+      evt.preventDefault();
       const pos = evt.lngLat;
       const loc = {
         lat: pos.lat,
         long: pos.lng
-      } 
+      }
       // Limitation du nombres de points:
       if (markers.length + markersSecondaires.length > 10) {
         alert(`Votre parcours comporte trop de lieux.\nLimitez vos choix pour en profiter.`);
@@ -168,7 +114,7 @@ export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, set
         setMarkersSecondaires([...markersSecondaires, loc]);
       }
     }}
-  > 
+  >
     <Layer id="add-3d-buildings" source="composite" source-layer="building"
       filter={["==", "extrude", "true"]}
       type="fill-extrusion"
@@ -229,7 +175,7 @@ export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, set
     {markers.map((currMarker, i) =>
       <Marker key={i} longitude={currMarker.long} latitude={currMarker.lat} anchor="center"
         onClick={(evt) => {
-          evt.originalEvent.preventDefault(); 
+          evt.originalEvent.preventDefault();
           setMarkers(removeMarker(markers, currMarker));
           evt.originalEvent.stopPropagation();
         }}
@@ -240,7 +186,7 @@ export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, set
     {markersSecondaires.map((currMarker, i) =>
       <Marker key={i} longitude={currMarker.long} latitude={currMarker.lat} anchor="center"
         onClick={(evt) => {
-          evt.originalEvent.preventDefault(); 
+          evt.originalEvent.preventDefault();
           setMarkersSecondaires(removeMarker(markersSecondaires, currMarker));
           evt.originalEvent.stopPropagation();
         }}

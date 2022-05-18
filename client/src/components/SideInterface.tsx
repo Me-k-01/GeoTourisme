@@ -36,7 +36,7 @@ export const SideInterface: FC<ISideInterfaceProps> = ({ markers, setMarkers, to
                     axios.get(`/contains/${str}`)
                         .then(resp => setAddress(resp.data));
             }} />
-            {!hideResult && <Scroller showPreview={showPreview} selectedIndex={selIndex} list={address} onSelect={(adress: Address, i: number) => {
+            {!hideResult && <Scroller showPreview={showPreview} updateList={setAddress} selectedIndex={selIndex} list={address} onSelect={(adress: Address, i: number) => {
                 // S'il y a trop de marqueur (limite à 12)
                 if (totalMarker > 11)
                     return alert(`Votre parcours comporte trop de lieux.\nLimitez vos choix pour en profiter.`);

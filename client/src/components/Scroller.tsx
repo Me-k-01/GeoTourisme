@@ -1,8 +1,7 @@
-import React, { Dispatch, FC, SetStateAction } from "react";
+import { Dispatch, FC, SetStateAction } from "react";
 import { Address } from "../address";
 import ReactStars from 'react-stars';
-import { addMark } from '../connection';
-import { setConstantValue } from "typescript";
+import { addMark } from '../connection'; 
 
 
 export interface IScrollerProps {

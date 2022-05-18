@@ -21,39 +21,17 @@ interface Trip {
 }
 
 interface IMapProp {
+  pos: Location;
   markers: Location[],
   markersSecondaires: Location[],
   setMarkers: React.Dispatch<React.SetStateAction<Location[]>>,
   setMarkersSecondaires: React.Dispatch<React.SetStateAction<Location[]>>
 }
-export const Map: FC<IMapProp> = ({ markers, markersSecondaires, setMarkers, setMarkersSecondaires }) => {
-  const [pos, setPos] = useState<Location>({ // Position par défaut: Albi
-    lat: 43.928902,
-    long: 2.146400
-  });
+export const Map: FC<IMapProp> = ({ pos, markers, markersSecondaires, setMarkers, setMarkersSecondaires }) => {
+  
 
   const [route, setRoute] = useState<turf.FeatureCollection<Geometry, {}>>(turf.featureCollection([]));
 
-  useEffect(() => {
-    ///////// Géolocalisation /////////
-    if (!navigator.geolocation)
-      console.error("Géolocalisation non supportée");
-    else
-      setInterval(() => {
-        navigator.geolocation.getCurrentPosition((pos) => {
-          // console.log("Votre position actuelle:", pos);
-          setPos({
-            lat: pos.coords.latitude,
-            long: pos.coords.longitude
-          });
-        }, null, {
-          enableHighAccuracy: true,
-          timeout: 5000,
-          maximumAge: 0
-        });
-      }, 5000);
-    ///////////////////////////////
-  }, []);
 
   const removeMarker = (markers: Location[], marker: Location) =>
     markers.filter(({ long, lat }) =>

@@ -16,14 +16,15 @@ export interface IScrollerProps {
 export const Scroller: FC<IScrollerProps> = ({ showPreview, list, updateList, onSelect, selectedIndex }) => {
 
     function stars(addr: Address, i: number, color: string) {
+        console.log(addr.nom, addr.userNote, addr.note);
+        
         return <ReactStars count={5} value={addr.userNote || addr.note}
 
             onChange={(n) => {
-                addMark(addr.nom, n).then((newNote: number) => {
-                    n = newNote;
+                addMark(addr.nom, n).then((newAvgNote: number) => { // Recupération de la nouvelle note moyenne
                     updateList(list => {
                         const newList = [...list];
-                        newList[i] = { ...addr, userNote: n, note: newNote };
+                        newList[i] = { ...addr, userNote: n, note: newAvgNote };
                         return newList;
                     });
                 });

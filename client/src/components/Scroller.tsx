@@ -10,13 +10,11 @@ export interface IScrollerProps {
     selectedIndex: number | undefined;
     showPreview: boolean;
     updateList: Dispatch<SetStateAction<Address[]>>;
+    isLoading: boolean;
 };
 
-export const Scroller: FC<IScrollerProps> = ({ showPreview, list, updateList, onSelect, selectedIndex }) => {
-
-    function stars(addr: Address, i: number, color: string) {
-        console.log(addr.nom, addr.userNote, addr.note);
-        
+export const Scroller: FC<IScrollerProps> = ({ isLoading, showPreview, list, updateList, onSelect, selectedIndex }) => {
+    function stars(addr: Address, i: number, color: string) {         
         return <ReactStars count={5} value={addr.userNote || addr.note}
 
             onChange={(n) => {
@@ -36,7 +34,7 @@ export const Scroller: FC<IScrollerProps> = ({ showPreview, list, updateList, on
     }
 
     return (list.length === 0 ?
-        <div>Pas de resultat</div> :
+        <div>{isLoading ? "Recherche en cours" : "Pas de resultat"}</div> :
         <ul className="scroller">
             {list.map((addr, i) => {
                 return <li key={i} className={getClass(i)} onClick={() => {

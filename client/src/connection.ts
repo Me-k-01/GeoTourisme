@@ -1,5 +1,8 @@
 import axios from "axios";
 
+export async function search(searchStr: string) {
+  return (await axios.get(`/contains/${searchStr}/${await getUserId()}`)).data;
+}
 
 //Toutes les 5s on va regarder ce qu'il y a autour
 export async function nearby(latbis: number, longbis: number) {

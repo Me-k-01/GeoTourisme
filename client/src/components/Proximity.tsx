@@ -19,15 +19,14 @@ export const Proximity: FC<IProximityProps> = ({ pos, markers, setMarkers, total
     const [address, setAddress] = useState<Address[]>([]);
     const [selIndex, setSelIndex] = useState<number>();
     const [showPreview, setShowPreview] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
-    
-
-    useEffect(() => {
+    useEffect(() => { 
         setInterval(() => {
             // Fetch des lieu a proximité
-            nearby(pos.lat, pos.long).then((d) => {
-                console.log(d);
-                setAddress(d)
+            nearby(pos.lat, pos.long).then((d) => { 
+                setAddress(d);
+                setIsLoading(false);
             });
         }, 5000);
     }, [])
@@ -37,7 +36,7 @@ export const Proximity: FC<IProximityProps> = ({ pos, markers, setMarkers, total
             <Expand open={showPreview}>
                 {(selIndex !== undefined) && <Preview desc={address[selIndex].desc} img={address[selIndex].image} />}
             </Expand>
-            {<Scroller showPreview={showPreview} updateList={setAddress} selectedIndex={selIndex} list={address} onSelect={(adress: Address, i: number) => {
+            {<Scroller isLoading={isLoading} showPreview={showPreview} updateList={setAddress} selectedIndex={selIndex} list={address} onSelect={(adress: Address, i: number) => {
                 // S'il y a trop de marqueur (limite à 12)
                 if (totalMarker > 11)
                     return alert(`Votre parcours comporte trop de lieux.\nLimitez vos choix pour en profiter.`);

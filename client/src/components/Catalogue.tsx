@@ -1,12 +1,11 @@
 
 import { Dispatch, FC, SetStateAction, useState } from "react";
-import { Search } from "./Search"
-import axios from 'axios';
+import { Search } from "./Search";
 import { Scroller } from "./Scroller";
 import { Address } from "../address";
 import { Location } from "./Map"
 import { Preview } from "./Preview";
-import { getUserId } from '../connection';
+import { search } from '../connection';
 import Expand from 'react-expand-animated';
 
 interface ICatalogueProps {
@@ -20,6 +19,7 @@ export const Catalogue: FC<ICatalogueProps> = ({ markers, setMarkers, totalMarke
     const [address, setAddress] = useState<Address[]>([]);
     const [selIndex, setSelIndex] = useState<number>();
     const [showPreview, setShowPreview] = useState(false);
+    const [isLoading, setIsLoading] = useState(true);
 
     return (
         <>
@@ -28,13 +28,14 @@ export const Catalogue: FC<ICatalogueProps> = ({ markers, setMarkers, totalMarke
             </Expand>
             <Search onSubmit={async (str) => {
                 setHideResult(false);
-                if (str === "")
+                if (str === "") {
                     setAddress([]);
-                else
-                    axios.get(`/contains/${str}/${await getUserId()}`)
-                        .then(resp => setAddress(resp.data));
+                } else {
+                    setAddress(await search(str));
+                }
+                setIsLoading(false);
             }} />
-            {!hideResult && <Scroller showPreview={showPreview} updateList={setAddress} selectedIndex={selIndex} list={address} onSelect={(adress: Address, i: number) => {
+            {!hideResult && <Scroller isLoading={isLoading} showPreview={showPreview} updateList={setAddress} selectedIndex={selIndex} list={address} onSelect={(adress: Address, i: number) => {
                 // S'il y a trop de marqueur (limite à 12)
                 if (totalMarker > 11)
                     return alert(`Votre parcours comporte trop de lieux.\nLimitez vos choix pour en profiter.`);

@@ -21,7 +21,7 @@ export const SideInterface: FC<ISideInterfaceProps> = ({ markers, setMarkers, to
     const [selIndex, setSelIndex] = useState<number>();
     const [showPreview, setShowPreview] = useState(false);
 
-    const [state, setState] = useState<"search"|"proximity">("search");
+    const [state, setState] = useState<"search" | "proximity">("search");
 
     const whenHidden = (className: string) => showMenu ? "" : "  " + className;
 
@@ -29,7 +29,7 @@ export const SideInterface: FC<ISideInterfaceProps> = ({ markers, setMarkers, to
         <aside className={"side-interface" + whenHidden("closed")}>
             <nav>
                 <button onClick={() => setState("search")}><i className="fa-solid fa-book"></i></button>
-                <button onClick={() => setState("proximity")}><i className="fa-solid fa-crosshairs"></i></button> 
+                <button onClick={() => setState("proximity")}><i className="fa-solid fa-crosshairs"></i></button>
             </nav>
 
             <Expand open={showPreview}>

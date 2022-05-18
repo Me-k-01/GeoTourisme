@@ -1,5 +1,5 @@
 
-export interface Adress {
+export interface Address {
     nom: string;
     adresse: string;
     lat: number;

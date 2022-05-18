@@ -246,6 +246,6 @@ api.add_resource(containsNoStr, '/all/<id>')
 api.add_resource(noteMoyenne, '/noteM/<nom_l>')
 api.add_resource(ajouterNote, '/addNote/<nom_l>/<note>/<id>')
 api.add_resource(newUserId, '/newUser/')
-api.add_resource(visites, '/visites/')
+api.add_resource(visites, '/visites/<lat>/<long>/<id>')
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

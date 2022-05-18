@@ -5,7 +5,6 @@ interface IExpandProps {
 };
 
 export const Expand: FC<IExpandProps> = ({ children, isOpen }) => {
-
     return (
         <div className={"expand" + (isOpen ? "" : " closed")}>
             {children}

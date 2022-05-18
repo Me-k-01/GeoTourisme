@@ -10,9 +10,9 @@ interface ISideInterfaceProps {
     pos: Location;
 };
 
-export const SideInterface: FC<ISideInterfaceProps> = ({ pos, markers, setMarkers, totalMarker }) => { 
-    const [showMenu, setShowMenu] = useState(true);  
-    
+export const SideInterface: FC<ISideInterfaceProps> = ({ pos, markers, setMarkers, totalMarker }) => {
+    const [showMenu, setShowMenu] = useState(true);
+
     const [state, setState] = useState<"search" | "proximity">("search");
 
     const whenHidden = (className: string) => showMenu ? "" : "  " + className;
@@ -20,17 +20,17 @@ export const SideInterface: FC<ISideInterfaceProps> = ({ pos, markers, setMarker
     return (<>
         <aside className={"side-interface" + whenHidden("closed")}>
             <nav>
-                <button onClick={() => setState("search")}><i className="fa-solid fa-book"></i></button>
-                <button onClick={() => setState("proximity")}><i className="fa-solid fa-crosshairs"></i></button>
+                <button title="Catalogue de recherche" onClick={() => setState("search")}>
+                    <i className="fa-solid fa-book" />
+                </button>
+                <button title="Lieu à proximité" onClick={() => setState("proximity")}>
+                    <i className="fa-solid fa-crosshairs" />
+                </button>
             </nav>{
-                state === "search" ? 
-                    <Catalogue markers={markers} setMarkers={setMarkers} totalMarker={totalMarker} /> : 
+                state === "search" ?
+                    <Catalogue markers={markers} setMarkers={setMarkers} totalMarker={totalMarker} /> :
                     <Proximity pos={pos} markers={markers} setMarkers={setMarkers} totalMarker={totalMarker} />
-
-                
             }
-
-
         </aside>
         <div className="expander-wrapper">
             <button className="expander" onClick={() => {

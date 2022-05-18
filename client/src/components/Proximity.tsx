@@ -15,16 +15,16 @@ interface IProximityProps {
     pos: Location;
 };
 
-export const Proximity: FC<IProximityProps> = ({ pos, markers, setMarkers, totalMarker }) => { 
+export const Proximity: FC<IProximityProps> = ({ pos, markers, setMarkers, totalMarker }) => {
     const [address, setAddress] = useState<Address[]>([]);
     const [selIndex, setSelIndex] = useState<number>();
     const [showPreview, setShowPreview] = useState(false);
     const [isLoading, setIsLoading] = useState(true);
 
-    useEffect(() => { 
+    useEffect(() => {
         setInterval(() => {
             // Fetch des lieu a proximité
-            nearby(pos.lat, pos.long).then((d) => { 
+            nearby(pos.lat, pos.long).then((d) => {
                 setAddress(d);
                 setIsLoading(false);
             });
@@ -33,6 +33,7 @@ export const Proximity: FC<IProximityProps> = ({ pos, markers, setMarkers, total
 
     return (
         <>
+            <h2>Lieu a proximité</h2>
             <Expand open={showPreview}>
                 {(selIndex !== undefined) && <Preview desc={address[selIndex].desc} img={address[selIndex].image} />}
             </Expand>

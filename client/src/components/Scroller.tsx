@@ -1,9 +1,9 @@
 import { FC } from "react";
-import { Adresse } from "../Adresse";
+import { Adress } from "../Adress";
 
 export interface IScrollerProps {
-    list: Adresse[];
-    onSelect: (address: Adresse) => void;
+    list: Adress[];
+    onSelect: (address: Adress) => void;
 };
 
 export const Scroller: FC<IScrollerProps> = ({ list, onSelect }) => {

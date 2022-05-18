@@ -2,7 +2,7 @@ import { FC, useState, Dispatch, SetStateAction } from "react";
 import { Search } from "./Search"
 import axios from 'axios';
 import { Scroller } from "./Scroller";
-import { Address } from "../Address";
+import { Address } from "../address";
 import { Location } from "./Map"
 import { Preview } from "./Preview";
 import Expand from 'react-expand-animated';

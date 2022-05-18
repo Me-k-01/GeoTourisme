@@ -37,8 +37,6 @@ class near(Resource):
                         nom, adresse, latitude, longitude, description, image
                      FROM
                         Lieux
-                     NATURAL JOIN
-                        Visite
                      WHERE
                         (latitude BETWEEN """ + str(latMoyenneM) + " AND " + str(latMoyenneP) +""")
                      AND
@@ -138,6 +136,32 @@ def getMoyen(nom_l) :
  
     return (moy/len(data))
 
+def getNear(lat,long):
+    print("latitude : " + lat)
+
+    prox = 0.05 #float(request.args.get('prox'))
+        
+    latMoyenneM = float(lat)-prox
+    latMoyenneP = float(lat)+prox
+    longMoyenneM = float(long)-prox
+    longMoyenneP = float(long)+prox
+        
+    connect = mysql.get_db()
+    cursor = connect.cursor()
+    requete = """SELECT
+                    nom
+                    FROM
+                    Lieux
+                    NATURAL JOIN
+                    Visite
+                    WHERE
+                    (latitude BETWEEN """ + str(latMoyenneM) + " AND " + str(latMoyenneP) +""")
+                    AND
+                    (longitude BETWEEN """ + str(longMoyenneM) + " AND " + str(longMoyenneP)+")"
+    cursor.execute(requete)
+    data = cursor.fetchall()
+    return data
+
 class noteMoyenne(Resource):
     def get(self,nom_l): 
         return getMoyen(nom_l)
@@ -182,6 +206,39 @@ class newUserId(Resource):
         connect.commit()
         return newId
 
+class visites(Resource):
+    def get(self,lat,long, id):
+        connect = mysql.get_db()
+        cursor = connect.cursor()
+        requete = "DELETE FROM Visite WHERE id=\"" + id + "\""
+        cursor.execute(requete)
+
+        lieux = getNear(lat,long)
+        for l in lieux:
+            requeteAdd = "INSERT Visite (id, nom) VALUES(" + id + ", " + l[0] + ")" 
+        cursor.execute(requeteAdd)
+
+        connect.commit()
+
+        requeteVisites = """
+                            SELECT
+                              nom,
+                              COUNT(*) AS `num`
+                            FROM
+                              Visite
+                            GROUP BY
+                              nom
+                          """
+        cursor.execute(requeteVisites)
+        data = cursor.fetchall()
+        lst = []
+        for d in data:
+            tmp = dict()
+            tmp.update({'nom': d[0]})
+            tmp.update({'num': d[1]})
+            lst.append(tmp)
+        return jsonify(lst)
+
 api.add_resource(near, '/near/<lat>/<long>')
 api.add_resource(contains, '/contains/<str_w>/<id>')
 api.add_resource(containsNoId, '/contains/<str_w>')
@@ -189,5 +246,6 @@ api.add_resource(containsNoStr, '/all/<id>')
 api.add_resource(noteMoyenne, '/noteM/<nom_l>')
 api.add_resource(ajouterNote, '/addNote/<nom_l>/<note>/<id>')
 api.add_resource(newUserId, '/newUser/')
+api.add_resource(visites, '/visites/')
 if __name__ == '__main__':
     app.run(host='0.0.0.0', port=8080, debug=True)

@@ -28,12 +28,15 @@ Le client a été construit avec React, TypeScript ainsi qu'avec l'API MapBox et
 Ajouter un fichier *.env.local* contenant le token de mapbox
 ```REACT_APP_MAPBOX_TOKEN=<id_token>```.
 
-Puis faire la commande ```npm install && npm run build``` pour construire le projet.
+Puis faire la commande ```npm install``` pour installer les dependances.
 
 Et enfin lancer le client avec ```npm start```.
 
 > #### Dans le dossier serveur:
-Ajouter un fichier *bdd.py* contenant les logins d'une base de données SQLite.
+
+Installer les modules de flask restful avec la commande ```pip install flask flask_restful flask-mysql```
+
+Puis ajouter un fichier *bdd.py* contenant les logins d'une base de données SQLite.
 
 Le fichier doit être formaté comme suit:
 ```
@@ -42,6 +45,7 @@ user = 'mon_utilisateur'
 password = 'mon_mot_de_passe'
 database = 'nom_de_la_base_de_données'
 ```
+
 Puis lancer le serveur Python avec ```python3 main.py```. 
 
 ---

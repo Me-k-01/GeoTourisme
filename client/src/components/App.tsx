@@ -3,7 +3,6 @@ import { Map, Location } from "./Map";
 import axios from 'axios';
 import { SideInterface } from "./SideInterface";
 
-
 function App() {
   const [markers, setMarkers] = useState<Location[]>([]);
   const [markersSecondaires, setMarkersSecondaires] = useState<Location[]>([]);

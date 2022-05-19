@@ -4,7 +4,7 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: rgb(37, 37, 37);
+  background: #252525;
 }
 html,
 body,
@@ -30,4 +30,22 @@ input {
 
 .rotate {
   transform: rotate(180deg);
+}
+
+
+.switcher {
+  position: absolute;
+  right: 0;
+  top: 0;
+  margin: 20px;
+  color: white; 
+  
+  i {
+
+    padding: auto;
+    margin: auto;
+    width: 1rem;
+    height: 1rem;
+    font-size: 1rem;
+  }
 }

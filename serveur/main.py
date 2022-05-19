@@ -24,7 +24,7 @@ class near(Resource):
 
         print("latitude : " + lat)
 
-        prox = 0.05 #float(request.args.get('prox'))
+        prox = 0.002 #float(request.args.get('prox'))
         
         latMoyenneM = float(lat)-prox
         latMoyenneP = float(lat)+prox
@@ -251,7 +251,6 @@ class visites(Resource):
         return jsonify(lst)
 
 api.add_resource(near, '/near/<lat>/<long>/<id>')
-# api.add_resource(near, '/near/<lat>/<long>')
 api.add_resource(contains, '/contains/<str_w>/<id>')
 api.add_resource(containsNoId, '/contains/<str_w>')
 api.add_resource(containsNoStr, '/all/<id>')

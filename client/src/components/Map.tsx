@@ -1,6 +1,8 @@
 import * as turf from "@turf/turf";
 import { FC, useEffect, useState } from "react";
 import { Map as MapBox, Layer, Marker, Source } from 'react-map-gl';
+import Switch from "react-switch";
+
 
 export type Location = {
   lat: number;
@@ -28,8 +30,8 @@ interface IMapProp {
   setMarkersSecondaires: React.Dispatch<React.SetStateAction<Location[]>>
 }
 export const Map: FC<IMapProp> = ({ pos, markers, markersSecondaires, setMarkers, setMarkersSecondaires }) => {
-  
 
+  const [isWalking, setIsWalking] = useState(true);
   const [route, setRoute] = useState<turf.FeatureCollection<Geometry, {}>>(turf.featureCollection([]));
 
 
@@ -48,7 +50,7 @@ export const Map: FC<IMapProp> = ({ pos, markers, markersSecondaires, setMarkers
       }
 
       const coords = allMarkers.map(({ long, lat }) => `${long},${lat}`).join(';');
-      const req = `https://api.mapbox.com/optimized-trips/v1/mapbox/driving/${pos.long},${pos.lat};${coords}?overview=full&steps=true&geometries=geojson&source=first&access_token=${process.env.REACT_APP_MAPBOX_TOKEN!}`;
+      const req = `https://api.mapbox.com/optimized-trips/v1/mapbox/${isWalking ? "walking" : "driving"}/${pos.long},${pos.lat};${coords}?overview=full&steps=true&geometries=geojson&source=first&access_token=${process.env.REACT_APP_MAPBOX_TOKEN!}`;
       //&overview=full&steps=true&geometries=geojson&source=first&access_token=${}`
       const query = await fetch(req, { method: 'GET' });
       const response: Trip = await query.json();
@@ -67,9 +69,9 @@ export const Map: FC<IMapProp> = ({ pos, markers, markersSecondaires, setMarkers
       setRoute(routeGeoJSON);
     }
     createPath();
-  }, [markers, markersSecondaires, pos]); // S'il y a un changement de marqueurs ou de position on update le chemin 
+  }, [markers, markersSecondaires, pos, isWalking]); // S'il y a un changement de marqueurs ou de position on update le chemin 
 
-  return <MapBox
+  return <><MapBox
     initialViewState={{
       longitude: pos.long,
       latitude: pos.lat,
@@ -171,5 +173,16 @@ export const Map: FC<IMapProp> = ({ pos, markers, markersSecondaires, setMarkers
       >
       </Marker>
     )}
-  </MapBox>;
+  </MapBox>
+
+    <div className="switcher">
+      <Switch onChange={setIsWalking} checked={isWalking} 
+      onColor="#252525" offColor="#252525" 
+      checkedIcon={
+        <i className="fa-solid fa-person-walking"></i>
+      } uncheckedIcon={
+        <i className="fa-solid fa-car-side"></i>
+      } />
+    </div>
+  </>;
 }
